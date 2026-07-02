@@ -6,6 +6,9 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.2.1 – 2026-07-02
+- Removed the top info banner; the options now sit in their own card at the top as modern toggle switches.
+
 ## v2.2.0 "Switchboard" – 2026-07-02
 - New option: emit `sprache=de` for German-language sources (off by default).
 - New option: strip `[[…]]` wikilinks from the "werk" field, e.g. `[[The Atlantic]]` → `The Atlantic` (off by default).

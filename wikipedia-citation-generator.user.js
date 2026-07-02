@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.2.0
+// @version      2.2.1
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.2.0',
+		version: '2.2.1',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -51,6 +51,14 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.2.1',
+			name: null,
+			date: '2026-07-02',
+			changes: [
+				'Info-Hinweis oben entfernt. Die Optionen sind jetzt als moderne Schalter in einer eigenen Karte am Anfang untergebracht.'
+			]
+		},
 		{
 			version: '2.2.0',
 			name: 'Switchboard',
@@ -905,9 +913,6 @@
 				--wcg-overlay-bg: rgba(0, 0, 0, 0.72);
 				--wcg-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 				--wcg-focus-ring: rgba(102, 126, 234, 0.30);
-				--wcg-status-info-bg: rgba(59, 130, 246, 0.15);
-				--wcg-status-info-text: #9cc6ff;
-				--wcg-status-info-border: rgba(59, 130, 246, 0.35);
 				--wcg-picker-tip-bg: #2a2a38;`;
 
 		GM_addStyle(`
@@ -926,9 +931,6 @@
 				--wcg-overlay-bg: rgba(0, 0, 0, 0.6);
 				--wcg-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
 				--wcg-focus-ring: rgba(102, 126, 234, 0.15);
-				--wcg-status-info-bg: #d1ecf1;
-				--wcg-status-info-text: #0c5460;
-				--wcg-status-info-border: #bee5eb;
 				--wcg-picker-tip-bg: #333333;
 				--wcg-badge-bg: rgba(255, 255, 255, 0.18);
 				--wcg-badge-bg-hover: rgba(255, 255, 255, 0.32);
@@ -1067,23 +1069,65 @@
 				font-size: 13px !important;
 			}
 
-			/* Citation options (compact checkbox rows) */
+			/* Citation options — card with modern toggle switches */
 			.wcg-options {
-				display: flex !important;
-				flex-direction: column !important;
-				gap: 4px !important;
-				margin-bottom: 12px !important;
+				background: var(--wcg-secondary-bg) !important;
+				border: 1px solid var(--wcg-border) !important;
+				border-radius: 12px !important;
+				padding: 2px 14px !important;
+				margin-bottom: 16px !important;
 			}
-			.wcg-checkbox {
+			.wcg-options-title {
+				font-size: 11px !important;
+				font-weight: 700 !important;
+				text-transform: uppercase !important;
+				letter-spacing: 0.6px !important;
+				color: var(--wcg-text-muted) !important;
+				padding: 10px 0 2px !important;
+			}
+			.wcg-toggle {
 				display: flex !important;
 				align-items: center !important;
-				gap: 8px !important;
-				font-size: 13px !important;
-				color: var(--wcg-text-muted) !important;
+				justify-content: space-between !important;
+				gap: 14px !important;
+				padding: 11px 0 !important;
 				cursor: pointer !important;
 			}
-			.wcg-checkbox input { accent-color: var(--wcg-accent) !important; width: 15px !important; height: 15px !important; cursor: pointer !important; margin: 0 !important; }
-			.wcg-checkbox code { font-size: 12px !important; background: var(--wcg-secondary-bg) !important; padding: 1px 5px !important; border-radius: 4px !important; }
+			.wcg-toggle + .wcg-toggle { border-top: 1px solid var(--wcg-border) !important; }
+			.wcg-toggle-text { font-size: 13px !important; color: var(--wcg-text) !important; line-height: 1.4 !important; }
+			.wcg-toggle code {
+				font-size: 12px !important;
+				font-family: Monaco, Menlo, monospace !important;
+				background: var(--wcg-input-bg) !important;
+				border: 1px solid var(--wcg-border) !important;
+				padding: 1px 6px !important;
+				border-radius: 4px !important;
+			}
+			.wcg-toggle input { position: absolute !important; opacity: 0 !important; width: 0 !important; height: 0 !important; }
+			.wcg-toggle-track {
+				position: relative !important;
+				flex-shrink: 0 !important;
+				width: 40px !important;
+				height: 23px !important;
+				background: var(--wcg-border) !important;
+				border-radius: 999px !important;
+				transition: background 0.2s !important;
+			}
+			.wcg-toggle-track::after {
+				content: "" !important;
+				position: absolute !important;
+				top: 2px !important;
+				left: 2px !important;
+				width: 19px !important;
+				height: 19px !important;
+				background: #fff !important;
+				border-radius: 50% !important;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+				transition: transform 0.2s !important;
+			}
+			.wcg-toggle input:checked + .wcg-toggle-track { background: var(--wcg-accent) !important; }
+			.wcg-toggle input:checked + .wcg-toggle-track::after { transform: translateX(17px) !important; }
+			.wcg-toggle input:focus-visible + .wcg-toggle-track { box-shadow: 0 0 0 3px var(--wcg-focus-ring) !important; }
 
 			.wcg-button {
 				padding: 9px 18px !important;
@@ -1167,19 +1211,6 @@
 				background: rgba(40, 167, 69, 0.15) !important;
 				padding: 3px 8px !important;
 				border-radius: 4px !important;
-			}
-			
-			.wcg-status {
-				padding: 9px 14px !important;
-				border-radius: 8px !important;
-				margin-bottom: 12px !important;
-				font-size: 13px !important;
-			}
-			
-			.wcg-status-info {
-				background: var(--wcg-status-info-bg) !important;
-				color: var(--wcg-status-info-text) !important;
-				border: 1px solid var(--wcg-status-info-border) !important;
 			}
 
 			/* ---- Changelog modal ---- */
@@ -1295,9 +1326,18 @@
 					</div>
 			</div>
 			<div class="wcg-modal-content">
-				<div class="wcg-status wcg-status-info">
-					<strong>✨ Automatisch extrahiert</strong><br>
-					Überprüfen Sie die Daten vor dem Kopieren. Bei Fehlern: F12 → Console öffnen.
+				<div class="wcg-options">
+					<div class="wcg-options-title">⚙️ Optionen</div>
+					<label class="wcg-toggle">
+						<span class="wcg-toggle-text">Bei deutschsprachigen Quellen <code>sprache=de</code> setzen</span>
+						<input type="checkbox" id="wcg-opt-german" ${opts.germanLang ? 'checked' : ''}>
+						<span class="wcg-toggle-track"></span>
+					</label>
+					<label class="wcg-toggle">
+						<span class="wcg-toggle-text">Wikilinks im Werk entfernen (<code>[[…]]</code>)</span>
+						<input type="checkbox" id="wcg-opt-plainwerk" ${opts.plainWerk ? 'checked' : ''}>
+						<span class="wcg-toggle-track"></span>
+					</label>
 				</div>
 				<form id="wcg-form">
 					<div class="wcg-form-group${hasLearned.author ? ' wcg-learned' : ''}">
@@ -1324,10 +1364,6 @@
 							<button type="button" class="wcg-button wcg-button-select" data-select="date">🎯 Auswählen</button>
 						</label>
 						<input type="text" class="wcg-form-input" id="wcg-date" value="${metadata.date || ''}" placeholder="YYYY-MM-DD">
-					</div>
-					<div class="wcg-options">
-						<label class="wcg-checkbox"><input type="checkbox" id="wcg-opt-german" ${opts.germanLang ? 'checked' : ''}> Bei deutschsprachigen Quellen <code>sprache=de</code> setzen</label>
-						<label class="wcg-checkbox"><input type="checkbox" id="wcg-opt-plainwerk" ${opts.plainWerk ? 'checked' : ''}> Wikilinks im Werk entfernen (<code>[[…]]</code>)</label>
 					</div>
 					<div class="wcg-form-group">
 						<label class="wcg-form-label">Zitation</label>
