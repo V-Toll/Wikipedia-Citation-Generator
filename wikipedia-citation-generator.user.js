@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.2.1
+// @version      2.2.2
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.2.1',
+		version: '2.2.2',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -51,6 +51,15 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.2.2',
+			name: null,
+			date: '2026-07-02',
+			changes: [
+				'Das Zitations-Feld ist jetzt etwas größer.',
+				'Button „Abbrechen“ entfernt – das Fenster wird über das ✕ oben rechts geschlossen.'
+			]
+		},
 		{
 			version: '2.2.1',
 			name: null,
@@ -1063,7 +1072,7 @@
 			}
 
 			.wcg-form-textarea {
-				min-height: 60px !important;
+				min-height: 96px !important;
 				resize: vertical !important;
 				font-family: Monaco, Menlo, monospace !important;
 				font-size: 13px !important;
@@ -1373,7 +1382,6 @@
 			</div>
 			<div class="wcg-modal-actions">
 				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-refresh">🔄 DB laden</button>
-				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-cancel">Abbrechen</button>
 				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-update">🔄 Aktualisieren</button>
 				<button type="button" class="wcg-button wcg-button-primary" id="wcg-copy">📋 Kopieren</button>
 			</div>
@@ -1464,7 +1472,6 @@
 		};
 		
 		modal.querySelector('.wcg-modal-close').addEventListener('click', modalFunctions.closeModal);
-		modal.querySelector('#wcg-cancel').addEventListener('click', modalFunctions.closeModal);
 		modal.querySelector('#wcg-update').addEventListener('click', modalFunctions.updateCitation);
 		modal.querySelector('#wcg-copy').addEventListener('click', modalFunctions.copyCitation);
 		modal.querySelector('#wcg-refresh').addEventListener('click', modalFunctions.refreshDB);

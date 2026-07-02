@@ -6,6 +6,10 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.2.2 – 2026-07-02
+- The "Zitation" field is now a bit taller.
+- Removed the "Abbrechen" button — the window is closed via the ✕ at the top right.
+
 ## v2.2.1 – 2026-07-02
 - Removed the top info banner; the options now sit in their own card at the top as modern toggle switches.
 
