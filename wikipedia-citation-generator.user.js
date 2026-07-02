@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.1.1
+// @version      2.2.0
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,14 +24,16 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.1.1',
+		version: '2.2.0',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
 			externalPatterns: 'wcg_external_patterns',
 			externalVersion: 'wcg_external_version',
 			lastUpdate: 'wcg_last_db_update',
-			theme: 'wcg_theme'  // 'auto' | 'light' | 'dark'
+			theme: 'wcg_theme',  // 'auto' | 'light' | 'dark'
+			optGermanLang: 'wcg_opt_german_lang',  // emit sprache=de for German sources (default off)
+			optPlainWerk: 'wcg_opt_plain_werk'     // strip [[…]] wikilinks in werk (default off)
 		},
 		ui: {
 			modalId: 'wcg-modal',
@@ -49,6 +51,16 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.2.0',
+			name: 'Switchboard',
+			date: '2026-07-02',
+			changes: [
+				'Neue Option: bei deutschsprachigen Quellen „sprache=de“ setzen (standardmäßig aus).',
+				'Neue Option: Wikilinks im Werk entfernen, z. B. „[[The Atlantic]]“ → „The Atlantic“ (standardmäßig aus).',
+				'Kompakteres Fenster – die Buttons unten sind jetzt ohne Scrollen erreichbar.'
+			]
+		},
 		{
 			version: '2.1.1',
 			name: null,
@@ -125,6 +137,28 @@
 		btn.textContent = meta.icon;
 		btn.setAttribute('title', `Design: ${meta.label} (klicken zum Wechseln)`);
 		btn.setAttribute('aria-label', `Design umschalten – aktuell: ${meta.label}`);
+	}
+
+	// ================================
+	// CITATION OPTIONS (both default OFF, persisted per user)
+	// ================================
+
+	/** Current option states. */
+	function getOptions() {
+		return {
+			germanLang: GM_getValue(CONFIG.storage.optGermanLang, false),  // add sprache=de for German
+			plainWerk:  GM_getValue(CONFIG.storage.optPlainWerk, false)    // remove [[…]] in werk
+		};
+	}
+
+	/**
+	 * Strip MediaWiki links from a string:
+	 *   "[[Vox (Website)|Vox]]" → "Vox", "[[The Atlantic]]" → "The Atlantic".
+	 * Uses the piped display text when present, otherwise the target.
+	 */
+	function stripWikilinks(text) {
+		if (!text) return '';
+		return text.replace(/\[\[(?:[^\]|]*\|)?([^\]]+)\]\]/g, '$1');
 	}
 	let selectedElements = { title: null, author: null, date: null };
 	let wizardEventHandlers = { mouseover: null, click: null, keydown: null };
@@ -648,9 +682,11 @@
 			combined.language = combined.language.split('-')[0].toLowerCase();
 		}
 
+		// Mark German sources explicitly as 'de'. By default generateCitation omits
+		// sprache for German; the "sprache=de" option makes it emit it instead.
 		const hostname = window.location.hostname.replace(/^www\./, '');
 		if (hostname.endsWith('.de') || combined.language?.startsWith('de')) {
-			combined.language = '';
+			combined.language = 'de';
 		}
 		
 		if (!combined.siteName) {
@@ -668,13 +704,23 @@
 	
 	function generateCitation(metadata) {
 		const params = [];
+		const options = getOptions();
+
+		// Werk: optionally strip [[…]] wikilinks (e.g. "[[The Atlantic]]" → "The Atlantic").
+		let werk = metadata.siteName || getDomainFromUrl(window.location.href);
+		if (options.plainWerk) werk = stripWikilinks(werk);
+
+		// Sprache: German is emitted only when the option is on; other languages always.
+		let sprache = metadata.language || '';
+		if (sprache === 'de' && !options.germanLang) sprache = '';
+
 		const values = {
 			autor: metadata.author || '',
 			url: metadata.url || window.location.href,
 			titel: metadata.title || document.title,
-			werk: metadata.siteName || getDomainFromUrl(window.location.href),
+			werk: werk,
 			datum: metadata.date || '',
-			sprache: metadata.language || '',
+			sprache: sprache,
 			abruf: getCurrentDate()
 		};
 		
@@ -910,6 +956,8 @@
 				top: 50% !important;
 				left: 50% !important;
 				transform: translate(-50%, -50%) !important;
+				display: flex !important;
+				flex-direction: column !important;
 				width: 90% !important;
 				max-width: 800px !important;
 				max-height: 90vh !important;
@@ -932,13 +980,13 @@
 			.wcg-modal-header {
 				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
 				color: white !important;
-				padding: 24px 28px !important;
+				padding: 16px 24px !important;
 				display: flex !important;
 				justify-content: space-between !important;
 				align-items: flex-start !important;
 			}
-			
-			.wcg-modal-title { font-size: 20px !important; font-weight: 700 !important; margin: 0 !important; display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 8px !important; }
+
+			.wcg-modal-title { font-size: 18px !important; font-weight: 700 !important; margin: 0 !important; display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 8px !important; }
 			.wcg-db-info { font-size: 12px !important; opacity: 0.92 !important; margin-top: 6px !important; }
 
 			/* Clickable version badge -> opens the changelog */
@@ -979,22 +1027,22 @@
 			.wcg-modal-close { font-size: 24px !important; }
 			.wcg-modal-close:hover, .wcg-theme-toggle:hover { background: rgba(255, 255, 255, 0.25) !important; }
 			
-			.wcg-modal-content { padding: 28px !important; max-height: calc(90vh - 140px) !important; overflow-y: auto !important; }
-			.wcg-form-group { margin-bottom: 20px !important; }
-			
+			.wcg-modal-content { padding: 18px 24px !important; flex: 1 1 auto !important; min-height: 0 !important; overflow-y: auto !important; }
+			.wcg-form-group { margin-bottom: 12px !important; }
+
 			.wcg-form-label {
 				display: flex !important;
 				align-items: center !important;
 				justify-content: space-between !important;
 				font-weight: 600 !important;
-				margin-bottom: 8px !important;
+				margin-bottom: 5px !important;
 				color: var(--wcg-text) !important;
-				font-size: 14px !important;
+				font-size: 13px !important;
 			}
 
 			.wcg-form-input {
 				width: 100% !important;
-				padding: 12px 14px !important;
+				padding: 9px 12px !important;
 				background: var(--wcg-input-bg) !important;
 				color: var(--wcg-text) !important;
 				border: 2px solid var(--wcg-border) !important;
@@ -1011,16 +1059,34 @@
 				border-color: var(--wcg-accent) !important;
 				box-shadow: 0 0 0 3px var(--wcg-focus-ring) !important;
 			}
-			
+
 			.wcg-form-textarea {
-				min-height: 100px !important;
+				min-height: 60px !important;
 				resize: vertical !important;
 				font-family: Monaco, Menlo, monospace !important;
 				font-size: 13px !important;
 			}
-			
+
+			/* Citation options (compact checkbox rows) */
+			.wcg-options {
+				display: flex !important;
+				flex-direction: column !important;
+				gap: 4px !important;
+				margin-bottom: 12px !important;
+			}
+			.wcg-checkbox {
+				display: flex !important;
+				align-items: center !important;
+				gap: 8px !important;
+				font-size: 13px !important;
+				color: var(--wcg-text-muted) !important;
+				cursor: pointer !important;
+			}
+			.wcg-checkbox input { accent-color: var(--wcg-accent) !important; width: 15px !important; height: 15px !important; cursor: pointer !important; margin: 0 !important; }
+			.wcg-checkbox code { font-size: 12px !important; background: var(--wcg-secondary-bg) !important; padding: 1px 5px !important; border-radius: 4px !important; }
+
 			.wcg-button {
-				padding: 12px 24px !important;
+				padding: 9px 18px !important;
 				border: none !important;
 				border-radius: 8px !important;
 				font-size: 14px !important;
@@ -1070,10 +1136,13 @@
 			.wcg-modal-actions {
 				display: flex !important;
 				justify-content: flex-end !important;
-				gap: 12px !important;
-				padding-top: 20px !important;
+				flex-wrap: wrap !important;
+				gap: 10px !important;
+				flex-shrink: 0 !important;
+				padding: 13px 24px !important;
 				border-top: 2px solid var(--wcg-border-subtle) !important;
-				margin-top: 24px !important;
+				background: var(--wcg-surface) !important;
+				border-radius: 0 0 16px 16px !important;
 			}
 
 			.wcg-overlay {
@@ -1101,10 +1170,10 @@
 			}
 			
 			.wcg-status {
-				padding: 12px 16px !important;
+				padding: 9px 14px !important;
 				border-radius: 8px !important;
-				margin-bottom: 20px !important;
-				font-size: 14px !important;
+				margin-bottom: 12px !important;
+				font-size: 13px !important;
 			}
 			
 			.wcg-status-info {
@@ -1204,10 +1273,12 @@
 		const learnedPatterns = JSON.parse(GM_getValue(CONFIG.storage.learnedPatterns, '{}'));
 		const hasLearned = learnedPatterns[hostname]?.learned || {};
 		
+		const opts = getOptions();
+
 		const overlay = document.createElement('div');
 		overlay.className = 'wcg-overlay';
 		overlay.addEventListener('click', () => modalFunctions.closeModal());
-		
+
 		const modal = document.createElement('div');
 		modal.id = CONFIG.ui.modalId;
 		modal.innerHTML = `
@@ -1254,17 +1325,21 @@
 						</label>
 						<input type="text" class="wcg-form-input" id="wcg-date" value="${metadata.date || ''}" placeholder="YYYY-MM-DD">
 					</div>
+					<div class="wcg-options">
+						<label class="wcg-checkbox"><input type="checkbox" id="wcg-opt-german" ${opts.germanLang ? 'checked' : ''}> Bei deutschsprachigen Quellen <code>sprache=de</code> setzen</label>
+						<label class="wcg-checkbox"><input type="checkbox" id="wcg-opt-plainwerk" ${opts.plainWerk ? 'checked' : ''}> Wikilinks im Werk entfernen (<code>[[…]]</code>)</label>
+					</div>
 					<div class="wcg-form-group">
 						<label class="wcg-form-label">Zitation</label>
 						<textarea class="wcg-form-input wcg-form-textarea" id="wcg-citation" readonly></textarea>
 					</div>
-					<div class="wcg-modal-actions">
-						<button type="button" class="wcg-button wcg-button-secondary" id="wcg-refresh">🔄 DB laden</button>
-						<button type="button" class="wcg-button wcg-button-secondary" id="wcg-cancel">Abbrechen</button>
-						<button type="button" class="wcg-button wcg-button-secondary" id="wcg-update">🔄 Aktualisieren</button>
-						<button type="button" class="wcg-button wcg-button-primary" id="wcg-copy">📋 Kopieren</button>
-					</div>
 				</form>
+			</div>
+			<div class="wcg-modal-actions">
+				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-refresh">🔄 DB laden</button>
+				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-cancel">Abbrechen</button>
+				<button type="button" class="wcg-button wcg-button-secondary" id="wcg-update">🔄 Aktualisieren</button>
+				<button type="button" class="wcg-button wcg-button-primary" id="wcg-copy">📋 Kopieren</button>
 			</div>
 		`;
 		
@@ -1368,6 +1443,16 @@
 
 		// Version badge opens the changelog.
 		modal.querySelector('#wcg-version-badge').addEventListener('click', showChangelogModal);
+
+		// Citation options: persist the choice and regenerate the preview immediately.
+		modal.querySelector('#wcg-opt-german').addEventListener('change', (e) => {
+			GM_setValue(CONFIG.storage.optGermanLang, e.target.checked);
+			modalFunctions.updateCitation();
+		});
+		modal.querySelector('#wcg-opt-plainwerk').addEventListener('change', (e) => {
+			GM_setValue(CONFIG.storage.optPlainWerk, e.target.checked);
+			modalFunctions.updateCitation();
+		});
 
 		modal.querySelectorAll('[data-select]').forEach(btn => {
 			btn.addEventListener('click', (e) => {

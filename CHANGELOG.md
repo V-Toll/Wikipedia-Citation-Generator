@@ -6,6 +6,11 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.2.0 "Switchboard" – 2026-07-02
+- New option: emit `sprache=de` for German-language sources (off by default).
+- New option: strip `[[…]]` wikilinks from the "werk" field, e.g. `[[The Atlantic]]` → `The Atlantic` (off by default).
+- More compact window — the bottom buttons are now reachable without scrolling.
+
 ## v2.1.1 – 2026-07-02
 - Script and pattern database now live together in one GitHub repository.
 - Automatic script updates through Violentmonkey (via `@updateURL`).
