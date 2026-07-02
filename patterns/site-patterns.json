@@ -1,0 +1,1038 @@
+{
+  "version": "2.0.9",
+  "lastUpdated": "2026-07-02T00:00:00Z",
+  "description": "Pattern database for the Wikipedia Citation Generator (Userscript)",
+  "patterns": {
+	"spiegel.de": {
+	  "name": "[[Der Spiegel (online)|Der Spiegel]]",
+	  "selectors": {
+		"title": "h1, .headline, [data-area=\"headline\"], .leading-tight, .font-bold.text-xl, .text-4xl",
+		"author": "header a[href*='/impressum/autor'], article a[href*='/impressum/autor'], .text-shade-darker.mt-8, .font-sansUI.mt-8, div[class*='lg:w-8/12'] .font-sansUI, article .font-sansUI.text-shade-darker",
+		"date": "time, .date, [data-area=\"date\"], [data-testid=\"publish-date\"] time, .text-s"
+	  },
+	  "authorProcessing": "spiegel",
+	  "authorAbbreviations": {
+		"hba": "Henrik Bahlmann",
+		"aeh": "Anna Ehlebracht",
+		"mgo": "Malte Göbel",
+		"mkh": "Miriam Khan",
+		"czl": "Charlotte Lüder",
+		"jml": "Jonas Mielke",
+		"jpe": "Jan Petter",
+		"ptz": "Florian Pütz",
+		"svs": "Sven Scharf",
+		"esw": "Elisa Schwarze",
+		"kim": "Kim Staudt",
+		"sol": "Sebastian Stoll",
+		"atr": "Anastasia Trenkler",
+		"naw": "Nadine Wolter",
+		"dk": "Dirk Kurbjuweit",
+		"tdo": "Thorsten Dörting",
+		"com": "Cordula Meyer",
+		"juh": "Judith Horchert",
+		"bha": "Barbara Hardinghaus",
+		"neu": "Alexander Neubacher",
+		"hut": "Hendrik Ternieden",
+		"otr": "Oliver Trenkamp",
+		"wgl": "Stefan Weigel",
+		"bim": "Birger Menke",
+		"kir": "Bente Kirschstein",
+		"itz": "Matthias Streitz",
+		"pad": "Patricia Dreyer",
+		"mmm": "Malte Müller-Michaelis",
+		"suc": "Jörn Sucher",
+		"wal": "Anselm Waldermann",
+		"mel": "Melanie Ahlemeier",
+		"ler": "Lisa Erdmann",
+		"kev": "Kevin Hagen",
+		"ohe": "Olaf Heuser",
+		"oka": "Olaf Kanter",
+		"sak": "Sabrina Knoll",
+		"nck": "Nicolai Kwasniewski",
+		"mkl": "Florian Merkel",
+		"cop": "Charlene Optensteinen",
+		"dop": "Dominik Peters",
+		"rae": "Daniel Raecke",
+		"jkr": "Jens Radü",
+		"mwo": "Martin Wolf",
+		"ama": "Melanie Amann",
+		"sby": "Susanne Beyer",
+		"ufi": "Ullrich Fichtner",
+		"lg": "Lothar Gorris",
+		"mah": "Marc Hujer",
+		"kuz": "Stefan Kuzmany",
+		"jat": "Janko Tietz",
+		"ulz": "Benjamin Schulz",
+		"hic": "Christoph Hickmann",
+		"ron": "Roland Nelles",
+		"fie": "Maria Fiedler",
+		"kor": "Marina Kormbaki",
+		"flo": "Florian Gathmann",
+		"sog": "Sophie Garbe",
+		"mfh": "Milena Hassenkamp",
+		"fhi": "Fabian Hillebrand",
+		"pkr": "Paul-Anton Krüger",
+		"akm": "Ann-Katrin Müller",
+		"anr": "Anna Reimann",
+		"jos": "Jonas Schaible",
+		"csc": "Christoph Schult",
+		"cte": "Christian Teevs",
+		"tut": "Linda Tutmann",
+		"sev": "Severin Weiland",
+		"ded": "Deike Diening",
+		"mfk": "Markus Feldenkirchen",
+		"sef": "Sebastian Fischer",
+		"mgb": "Matthias Gebauer",
+		"ham": "Konstantin von Hammerstein",
+		"phw": "Philipp Wittrock",
+		"fek": "Felix Keßler",
+		"mrc": "Marc Röhlig",
+		"and": "Anke Dürr",
+		"vbt": "Markus Verbeet",
+		"sos": "Sophia Schirmer",
+		"sms": "Ansgar Siemens",
+		"bbr": "Birte Bredow",
+		"lmd": "Lisa Duhm",
+		"fio": "Fiona Ehlers",
+		"fok": "Silke Fokken",
+		"kfr": "Kathrin Fromm",
+		"gud": "Hubert Gude",
+		"kha": "Kristin Haug",
+		"him": "Armin Himmelrath",
+		"kub": "Levin Kubeth",
+		"ala": "Annette Langer",
+		"lal": "Katrin Langhans",
+		"gla": "Gunther Latsch",
+		"chp": "Christopher Piltz",
+		"has": "Hannes Schrader",
+		"sun": "Swantje Unterberg",
+		"wit": "Jens Witte",
+		"jpz": "Jean-Pierre Ziegler",
+		"jdl": "Jörg Diehl",
+		"wow": "Wolf Wiedmann-Schmidt",
+		"sam": "Susanne Amann",
+		"mba": "Maik Baumgärtner",
+		"sve": "Sven Becker",
+		"le": "Lukas Eberle",
+		"rho": "Roman Höfner",
+		"sep": "Philipp Kollenbroich",
+		"rol": "Roman Lehberger",
+		"nna": "Nicola Naber",
+		"srö": "Sven Röbel",
+		"fis": "Fidelius Schmid",
+		"swe": "Sara Wess",
+		"amp": "Jürgen Dahlkamp",
+		"jjc": "Julia Jüttner",
+		"klw": "Klaus Wiegrefe",
+		"fbö": "Frauke Böger",
+		"jlo": "Juliane Löffler",
+		"bra": "Markus Brauck",
+		"yes": "Yasmin El-Sharif",
+		"stk": "Stefan Kaiser",
+		"cos": "Cornelia Schmergal",
+		"sh": "Simon Hage",
+		"vbl": "Vicky Bargel",
+		"phb": "Philip Bethge",
+		"beb": "Benjamin Bidder",
+		"mic": "Michael Brächer",
+		"fdi": "Florian Diekmann",
+		"kig": "Kristina Gnirke",
+		"hpp": "Max Hoppenstedt",
+		"hej": "Henning Jauernig",
+		"mamk": "Matthias Kaufmann",
+		"kko": "Katharina Koerth",
+		"mak": "Matthias Kremp",
+		"mum": "Martin U. Müller",
+		"tne": "Thilo Neumann",
+		"apr": "Alexander Preker",
+		"ssu": "Stefan Schultz",
+		"mad": "Markus Dettmer",
+		"mik": "Michael Kröger",
+		"mbe": "Markus Becker",
+		"dab": "David Böcking",
+		"gru": "Angela Gruber",
+		"akü": "Alexander Kühn",
+		"rei": "Christian Reiermann",
+		"rom": "Marcel Rosenbach",
+		"mvr": "Mathieu von Rohr",
+		"oto": "Özlem Topçu",
+		"pop": "Maximilian Popp",
+		"pro": "Julia Prosinger",
+		"stu": "Kurt Stukenberg",
+		"boy": "Ann-Dorit Boy",
+		"col": "Francesco Collini",
+		"moa": "Mohannad Alkhalil Alnajjar",
+		"kgp": "Katharina Graca Peters",
+		"jpu": "Jan Puhl",
+		"fin": "Serafin Reiber",
+		"asc": "Anna-Sophie Schneider",
+		"arv": "Alexandra Berlin",
+		"suk": "Susanne Koelbl",
+		"kku": "Katrin Kuntz",
+		"slü": "Steffen Lüdke",
+		"jvm": "Juliane von Mittelstaedt",
+		"npa": "Nadia Pantel",
+		"cre": "Christoph Reuter",
+		"asa": "Alexander Sarovic",
+		"fsc": "Fritz Schaap",
+		"jme": "Julia Merlot",
+		"ktm": "Katja Thimm",
+		"pbe": "Patrick Beuth",
+		"me": "Marco Evers",
+		"ani": "Anika Freier",
+		"jg": "Johann Grolle",
+		"lki": "Lukas Kissel",
+		"gui": "Guido Kleinhubbert",
+		"ahh": "Arvid Haitsch",
+		"mha": "Marc Hasse",
+		"jko": "Julia Koch",
+		"koe": "Julia Köppe",
+		"msk": "Martin Schlak",
+		"nis": "Nils-Viktor Sorge",
+		"sug": "Susanne Götze",
+		"kk": "Kerstin Kullmann",
+		"alw": "Alina Schadwinkel",
+		"ble": "Jörg Blech",
+		"mag": "Maik Großekathöfer",
+		"chs": "Christoph Seidler",
+		"sta": "Olaf Stampf",
+		"win": "Antje Windmann",
+		"oeh": "Philipp Oehmke",
+		"eth": "Eva Thöne",
+		"evh": "Elisa von Hof",
+		"rai": "Anton Rainer",
+		"feb": "Felix Bayer",
+		"tob": "Tobias Becker",
+		"cbu": "Christian Buß",
+		"kae": "Oliver Kaever",
+		"uk": "Ulrike Knöfel",
+		"atz": "Annina Metz",
+		"cpa": "Carola Padtberg",
+		"ks": "Katharina Stegelmann",
+		"lob": "Lars-Olav Beier",
+		"mbo": "Matern von Boeselager",
+		"rap": "Tobias Rapp",
+		"skr": "Jurek Skrobala",
+		"lba": "Laura Backes",
+		"bor": "Andreas Borcholte",
+		"xvc": "Xaver von Cranach",
+		"sha": "Sebastian Hammelehle",
+		"mhe": "Michail Hengstenberg",
+		"höb": "Wolfgang Höbel",
+		"ipp": "Enrico Ippolito",
+		"oz": "Özlem Gezer",
+		"cx": "Christoph Scheuermann",
+		"rlx": "Felix Dachsel",
+		"nga": "Nora Gantenbrink",
+		"jup": "Julia Kopatzki",
+		"jle": "Jonah Lemm",
+		"nes": "Timofey Neshitov",
+		"dia": "Dialika Neufeld",
+		"nyi": "Max Polonyi",
+		"cat": "Cathrin Schmiegel",
+		"jst": "Jonathan Stock",
+		"fhu": "Frauke Hunfeld",
+		"hgo": "Hauke Goos",
+		"luk": "Lukas Rilke",
+		"mey": "Jörn Meyn",
+		"aha": "Peter Ahrens",
+		"maf": "Matthias Fiedler",
+		"jan": "Jan Göbel",
+		"ngo": "Nina Golombek",
+		"bka": "Benjamin Knaack",
+		"krä": "Marcus Krämer",
+		"jol": "Jochen Leffers",
+		"mon": "Danial Montazeri",
+		"gp": "Gerhard Pfeil",
+		"joe": "Jörg Römer",
+		"tos": "Tobias Scharnagl",
+		"ffr": "Friederike Freiburg",
+		"lgr": "Lena Greiner",
+		"max": "Maximilian Rau",
+		"ase": "Anne Seith",
+		"acl": "Anna Clauß",
+		"ran": "Ralf Neukirch",
+		"jho": "Jan Hoffmeister",
+		"lot": "Charlotte Klein",
+		"hpi": "Hannah Pilarczyk",
+		"ayy": "Ayla Kiran",
+		"fln": "Frauke Lüpke-Narberhaus",
+		"end": "Helene Endres",
+		"nil": "Nike Laurenz",
+		"irb": "Irene Berres",
+		"abl": "Antje Blinda",
+		"cbn": "Christopher Bonnen",
+		"deg": "Markus Deggerich",
+		"taf": "Tanya Falenczyk",
+		"fla": "Helene Flachsenberg",
+		"flg": "Florian Gontek",
+		"vh": "Veronika Hackenbroch",
+		"lhi": "Lukas Hildebrand",
+		"mh": "Maren Hoffmann",
+		"kah": "Katharina Hölter",
+		"mke": "Maren Keller",
+		"lov": "Heike Klovert",
+		"hei": "Heike Le Ker",
+		"ele": "Eva Lehnen",
+		"löw": "Philipp Löwe",
+		"bma": "Benjamin Maack",
+		"cor": "Claudio Rizzello",
+		"mar": "Marthe Ruddat",
+		"sas": "Sandra Schulz",
+		"jus": "Julia Stanek",
+		"mas": "Markus Sutera",
+		"vet": "Verena Töpper",
+		"wbr": "Nina Weber",
+		"jul": "Jule Lutteroth",
+		"maw": "Marianne Wellershoff",
+		"ems": "Eva-Maria Schnurr",
+		"bhr": "Felix Bohr",
+		"gro": "Solveig Grothe",
+		"cgu": "Christoph Gunkel",
+		"kik": "Katja Iken",
+		"pat": "Frank Patalong",
+		"tha": "Frank Thadeusz",
+		"rbr": "Rafaela von Bredow",
+		"jor": "Johanna Röhr",
+		"ddd": "Dennis Deuermeier",
+		"häm": "Janita Hämäläinen",
+		"fho": "Florian Hofmann",
+		"lek": "Lenne Kaffka",
+		"kas": "Marco Kasang",
+		"flb": "Fabius Leibrock",
+		"mes": "Marius Mestermann",
+		"pem": "Petra Maier",
+		"spe": "Sandra Sperber",
+		"mfl": "Marie Steffens",
+		"rst": "Regina Steffens",
+		"zng": "Katharina Zingerle",
+		"pst": "Patrick Stotz",
+		"abh": "Anna Behrend",
+		"hda": "Holger Dambeck",
+		"ggg": "Guido Grigat",
+		"kal": "Frank Kalinowski",
+		"hol": "Ferdinand Holsten",
+		"cut": "Chris Kurt",
+		"ply": "Marcel Pauly",
+		"rie": "Bernhard Riedmann",
+		"tac": "Achim Tack",
+		"cw": "Christoph Winterbach",
+		"maz": "Mascha Zuder",
+		"cbr": "Christoph Brüggemeier",
+		"gsa": "Gesche Sager",
+		"sts": "Stefan Schütt",
+		"huh": "Holger Uhlig",
+		"vaw": "Valérie Wagner",
+		"mse": "Maxim Sergienko",
+		"caa": "Claudia Apel",
+		"jer": "Jens Ressing",
+		"ols": "Oliver Schmitt",
+		"irs": "Ireneus Schubial",
+		"ers": "Erik Seemann",
+		"lsh": "Lennart Hespenheide",
+		"seh": "Sebastian Hofer",
+		"bam": "Bastian Midasch",
+		"hst": "Heiko Stammel",
+		"zob": "Hanna Zobel",
+		"oel": "Angela Ölscher"
+	  },
+	  "filterAgencies": ["dpa", "sid", "afp", "reuters", "ap", "rtr"],
+	  "filterNames": ["DER SPIEGEL", "SPIEGEL", "DEIN SPIEGEL", "SPIEGEL BESTSELLER", "SPIEGEL GESCHICHTE", "Effilee", "SPIEGEL SPEZIAL", "SPIEGEL WISSEN", "S-Magazin", "SPIEGEL COACHING", "SPIEGEL CHRONIK"]
+	},
+	"transfermarkt.de": {
+	  "name": "[[transfermarkt.de]]",
+	  "selectors": {
+		"title": "h1, .data-header__headline-wrapper h1, .news-headline h1",
+		"author": ".news-author, .author-info, .data-header__content .author, [class*=\"author\"]",
+		"date": ".news-date, .date-published, .news-header .date, [class*=\"date\"]:not([class*=\"update\"])"
+	  },
+	  "authorProcessing": "transfermarkt"
+	},
+	"bild.de": {
+	  "name": "[[Bild (Zeitung)|Bild]]",
+	  "selectors": {
+		"title": "h1, .txt-headline",
+		"author": ".author, .byline",
+		"date": "time, .date"
+	  }
+	},
+	"zeit.de": {
+	  "name": "[[Die Zeit]]",
+	  "selectors": {
+		"title": "h1, .zon-teaser-standard__title",
+		"author": ".metadata__source, .byline",
+		"date": "time, .metadata__date"
+	  }
+	},
+	"faz.net": {
+	  "name": "[[Frankfurter Allgemeine Zeitung]]",
+	  "selectors": {
+		"title": "h1, .atc-HeadlineText",
+		"author": ".atc-MetaAuthor, .byline",
+		"date": "time, .atc-MetaTime"
+	  }
+	},
+	"sueddeutsche.de": {
+	  "name": "[[Süddeutsche Zeitung]]",
+	  "selectors": {
+		"title": "h1, .sz-headline",
+		"author": ".author, .byline",
+		"date": "time, .timeformat"
+	  }
+	},
+	"tagesschau.de": {
+	  "name": "[[Tagesschau.de]]",
+	  "selectors": {
+		"title": "h1, .meldungskopf__headline",
+		"author": ".authorline, .byline",
+		"date": ".meta__time, .stand"
+	  }
+	},
+	"kicker.de": {
+	  "name": "[[Kicker (Sportmagazin)|kicker.de|kicker]]",
+	  "selectors": {
+		"title": "h1, .kick__article-headline",
+		"author": ".kick__author, .author",
+		"date": "time, .kick__publish-date"
+	  }
+	},
+	"welt.de": {
+	  "name": "[[Die Welt]]"
+	},
+	"focus.de": {
+	  "name": "[[Focus]]"
+	},
+	"stern.de": {
+	  "name": "[[Stern (Zeitschrift)|Stern]]"
+	},
+	"handelsblatt.com": {
+	  "name": "[[Handelsblatt]]"
+	},
+	"wiwo.de": {
+	  "name": "[[Wirtschaftswoche]]"
+	},
+	"manager-magazin.de": {
+	  "name": "[[Manager Magazin]]"
+	},
+	"dw.com": {
+	  "name": "[[Deutsche Welle]]"
+	},
+	"deutschlandfunk.de": {
+	  "name": "[[Deutschlandfunk]]"
+	},
+	"ard.de": {
+	  "name": "[[ARD]]"
+	},
+	"zdf.de": {
+	  "name": "[[ZDF]]"
+	},
+	"rtl.de": {
+	  "name": "[[RTL Television|RTL]]"
+	},
+	"sat1.de": {
+	  "name": "[[Sat.1]]"
+	},
+	"pro7.de": {
+	  "name": "[[ProSieben]]"
+	},
+	"n-tv.de": {
+	  "name": "[[n-tv]]"
+	},
+	"sport1.de": {
+	  "name": "[[Sport1]]"
+	},
+	"sportschau.de": {
+	  "name": "[[Sportschau]]"
+	},
+	"auto-motor-und-sport.de": {
+	  "name": "[[Auto Motor und Sport]]"
+	},
+	"computer-bild.de": {
+	  "name": "[[Computer Bild]]"
+	},
+	"chip.de": {
+	  "name": "[[Chip (Zeitschrift)|Chip]]"
+	},
+	"heise.de": {
+	  "name": "[[Heise online]]"
+	},
+	"t-online.de": {
+	  "name": "[[T-Online]]"
+	},
+	"web.de": {
+	  "name": "[[WEB.DE]]"
+	},
+	"gmx.de": {
+	  "name": "[[GMX]]"
+	},
+	"nytimes.com": {
+	  "name": "[[The New York Times]]",
+	  "selectors": {
+		"title": "h1, [data-testid=\"headline\"]",
+		"author": ".byline-author, [data-testid=\"byline\"]",
+		"date": "time, .timestamp"
+	  }
+	},
+	"washingtonpost.com": {
+	  "name": "[[The Washington Post]]",
+	  "selectors": {
+		"title": "h1, .headline",
+		"author": "[data-testid='author-name-with-optional-link'] a[rel='author'], [data-testid='author-name-with-optional-link'] span[rel='author']",
+		"date": "time, .timestamp"
+	  }
+	},
+	"theguardian.com": {
+	  "name": "[[The Guardian]]",
+	  "selectors": {
+		"title": "h1, .content__headline",
+		"author": "a[rel=\"author\"], .byline, .contributor-byline",
+		"date": "time, .content__dateline-wpd"
+	  }
+	},
+	"bbc.com": {
+	  "name": "[[BBC]]",
+	  "selectors": {
+		"title": "h1, .story-body__h1",
+		"author": ".byline, .mini-info-list__item",
+		"date": "time, .date"
+	  }
+	},
+	"reuters.com": {
+	  "name": "[[Reuters]]",
+	  "selectors": {
+		"title": "h1, .ArticleHeader__headline",
+		"author": ".Attribution__container, .byline",
+		"date": "time, .ArticleHeader__date"
+	  }
+	},
+	"cnn.com": {
+	  "name": "[[CNN]]",
+	  "selectors": {
+		"title": "h1, .headline__text",
+		"author": ".byline__name, .metadata__byline",
+		"date": ".timestamp, .update-time"
+	  }
+	},
+	"wsj.com": {
+	  "name": "[[The Wall Street Journal]]"
+	},
+	"usatoday.com": {
+	  "name": "[[USA Today]]"
+	},
+	"foxnews.com": {
+	  "name": "[[Fox News]]"
+	},
+	"cbsnews.com": {
+	  "name": "[[CBS News]]"
+	},
+	"nbcnews.com": {
+	  "name": "[[NBC News]]"
+	},
+	"abcnews.go.com": {
+	  "name": "[[ABC News]]"
+	},
+	"bloomberg.com": {
+	  "name": "[[Bloomberg]]"
+	},
+	"forbes.com": {
+	  "name": "[[Forbes]]"
+	},
+	"time.com": {
+	  "name": "[[Time]]"
+	},
+	"newsweek.com": {
+	  "name": "[[Newsweek]]"
+	},
+	"economist.com": {
+	  "name": "[[The Economist]]"
+	},
+	"newyorker.com": {
+	  "name": "[[The New Yorker]]"
+	},
+	"theatlantic.com": {
+	  "name": "[[The Atlantic]]"
+	},
+	"politico.com": {
+	  "name": "[[Politico]]"
+	},
+	"huffpost.com": {
+	  "name": "[[HuffPost]]"
+	},
+	"buzzfeed.com": {
+	  "name": "[[BuzzFeed]]"
+	},
+	"vox.com": {
+	  "name": "[[Vox (Website)|Vox]]"
+	},
+	"slate.com": {
+	  "name": "[[Slate (Magazin)|Slate]]"
+	},
+	"salon.com": {
+	  "name": "[[Salon.com]]"
+	},
+	"dailymail.co.uk": {
+	  "name": "[[Daily Mail]]"
+	},
+	"independent.co.uk": {
+	  "name": "[[The Independent]]"
+	},
+	"telegraph.co.uk": {
+	  "name": "[[The Daily Telegraph|The Telegraph]]",
+	  "selectors": {
+		"title": "h1",
+		"author": "a[rel=\"author\"]",
+		"date": "time"
+	  }
+	},
+	"mirror.co.uk": {
+	  "name": "[[The Mirror]]"
+	},
+	"express.co.uk": {
+	  "name": "[[Daily Express]]"
+	},
+	"thesun.co.uk": {
+	  "name": "[[The Sun]]"
+	},
+	"metro.co.uk": {
+	  "name": "[[Metro (britische Zeitung)|Metro]]"
+	},
+	"arstechnica.com": {
+	  "name": "[[Ars Technica]]"
+	},
+	"techcrunch.com": {
+	  "name": "[[TechCrunch]]"
+	},
+	"wired.com": {
+	  "name": "[[Wired]]"
+	},
+	"engadget.com": {
+	  "name": "[[Engadget]]"
+	},
+	"theverge.com": {
+	  "name": "[[The Verge]]"
+	},
+	"gizmodo.com": {
+	  "name": "[[Gizmodo]]"
+	},
+	"cnet.com": {
+	  "name": "[[CNET]]"
+	},
+	"zdnet.com": {
+	  "name": "[[ZDNet]]"
+	},
+	"anandtech.com": {
+	  "name": "[[AnandTech]]"
+	},
+	"tomshardware.com": {
+	  "name": "[[Tom's Hardware]]"
+	},
+	"pcmag.com": {
+	  "name": "[[PC Magazine]]"
+	},
+	"pcworld.com": {
+	  "name": "[[PCWorld]]"
+	},
+	"macworld.com": {
+	  "name": "[[Macworld]]"
+	},
+	"nature.com": {
+	  "name": "[[Nature]]"
+	},
+	"newscientist.com": {
+	  "name": "[[New Scientist]]"
+	},
+	"sciencedaily.com": {
+	  "name": "[[ScienceDaily]]"
+	},
+	"scientificamerican.com": {
+	  "name": "[[Scientific American]]"
+	},
+	"popsci.com": {
+	  "name": "[[Popular Science]]"
+	},
+	"livescience.com": {
+	  "name": "[[Live Science]]"
+	},
+	"space.com": {
+	  "name": "[[Space.com]]"
+	},
+	"ft.com": {
+	  "name": "[[Financial Times]]"
+	},
+	"marketwatch.com": {
+	  "name": "[[MarketWatch]]"
+	},
+	"fool.com": {
+	  "name": "[[The Motley Fool]]"
+	},
+	"money.com": {
+	  "name": "[[Money (Zeitschrift)|Money]]"
+	},
+	"fortune.com": {
+	  "name": "[[Fortune (Zeitschrift)|Fortune]]"
+	},
+	"fastcompany.com": {
+	  "name": "[[Fast Company (Zeitschrift)|Fast Company]]"
+	},
+	"inc.com": {
+	  "name": "[[Inc. (Zeitschrift)|Inc.]]"
+	},
+	"entrepreneur.com": {
+	  "name": "[[Entrepreneur (Zeitschrift)|Entrepreneur]]"
+	},
+	"businessinsider.com": {
+	  "name": "[[Business Insider]]"
+	},
+	"cnbc.com": {
+	  "name": "[[CNBC]]"
+	},
+	"espn.com": {
+	  "name": "[[ESPN]]"
+	},
+	"si.com": {
+	  "name": "[[Sports Illustrated]]"
+	},
+	"bleacherreport.com": {
+	  "name": "[[Bleacher Report]]"
+	},
+	"cbssports.com": {
+	  "name": "[[CBS Sports]]"
+	},
+	"nbcsports.com": {
+	  "name": "[[NBC Sports]]"
+	},
+	"foxsports.com": {
+	  "name": "[[Fox Sports]]"
+	},
+	"sbnation.com": {
+	  "name": "[[SB Nation]]"
+	},
+	"deadspin.com": {
+	  "name": "[[Deadspin]]"
+	},
+	"theathletic.com": {
+	  "name": "[[The Athletic]]"
+	},
+	"goal.com": {
+	  "name": "[[Goal.com]]"
+	},
+	"fourfourtwo.com": {
+	  "name": "[[FourFourTwo]]"
+	},
+	"skysports.com": {
+	  "name": "[[Sky Sports]]"
+	},
+	"variety.com": {
+	  "name": "[[Variety (Magazin)|Variety]]"
+	},
+	"hollywoodreporter.com": {
+	  "name": "[[The Hollywood Reporter]]"
+	},
+	"deadline.com": {
+	  "name": "[[Deadline Hollywood]]"
+	},
+	"ew.com": {
+	  "name": "[[Entertainment Weekly]]"
+	},
+	"people.com": {
+	  "name": "[[People (Zeitschrift)|People]]"
+	},
+	"tmz.com": {
+	  "name": "[[TMZ]]"
+	},
+	"eonline.com": {
+	  "name": "[[E! Entertainment Television|E!]]"
+	},
+	"extratv.com": {
+	  "name": "[[Extra (US-Fernsehsendung)|Extra]]"
+	},
+	"accesshollywood.com": {
+	  "name": "[[Access Hollywood]]"
+	},
+	"rollingstone.com": {
+	  "name": "[[Rolling Stone]]"
+	},
+	"billboard.com": {
+	  "name": "[[Billboard (Magazin)|Billboard]]"
+	},
+	"pitchfork.com": {
+	  "name": "[[Pitchfork Media|Pitchfork]]"
+	},
+	"spin.com": {
+	  "name": "[[Spin (Magazin)|Spin]]"
+	},
+	"lemonde.fr": {
+	  "name": "[[Le Monde]]"
+	},
+	"lefigaro.fr": {
+	  "name": "[[Le Figaro]]"
+	},
+	"liberation.fr": {
+	  "name": "[[Libération]]"
+	},
+	"leparisien.fr": {
+	  "name": "[[Le Parisien]]"
+	},
+	"lexpress.fr": {
+	  "name": "[[L'Express]]"
+	},
+	"lepoint.fr": {
+	  "name": "[[Le Point]]"
+	},
+	"lesechos.fr": {
+	  "name": "[[Les Échos]]"
+	},
+	"france24.com": {
+	  "name": "[[France 24]]"
+	},
+	"franceinfo.fr": {
+	  "name": "[[Franceinfo]]"
+	},
+	"rfi.fr": {
+	  "name": "[[Radio France Internationale|RFI]]"
+	},
+	"tv5monde.com": {
+	  "name": "[[TV5 Monde]]"
+	},
+	"elpais.com": {
+	  "name": "[[El País]]"
+	},
+	"elmundo.es": {
+	  "name": "[[El Mundo (Spanien)|El Mundo]]"
+	},
+	"abc.es": {
+	  "name": "[[ABC (Zeitung, Madrid)|ABC]]"
+	},
+	"lavanguardia.com": {
+	  "name": "[[La Vanguardia]]"
+	},
+	"elperiodico.com": {
+	  "name": "[[El Periódico de Catalunya]]"
+	},
+	"larazon.es": {
+	  "name": "[[La Razón (Spanien)|La Razón]]"
+	},
+	"elconfidencial.com": {
+	  "name": "[[El Confidencial]]"
+	},
+	"eldiario.es": {
+	  "name": "[[elDiario.es]]"
+	},
+	"publico.es": {
+	  "name": "[[Público (Spanien)|Público]]"
+	},
+	"20minutos.es": {
+	  "name": "[[20 Minutos]]"
+	},
+	"rtve.es": {
+	  "name": "[[RTVE]]"
+	},
+	"marca.com": {
+	  "name": "[[Marca (Zeitung)|Marca]]"
+	},
+	"as.com": {
+	  "name": "[[AS (Zeitung)|AS]]"
+	},
+	"sport.es": {
+	  "name": "[[Sport (spanische Zeitung)|Sport]]"
+	},
+	"mundodeportivo.com": {
+	  "name": "[[Mundo Deportivo]]"
+	},
+	"repubblica.it": {
+	  "name": "[[la Repubblica]]"
+	},
+	"corriere.it": {
+	  "name": "[[Corriere della Sera]]"
+	},
+	"lastampa.it": {
+	  "name": "[[La Stampa]]"
+	},
+	"ilgiornale.it": {
+	  "name": "[[Il Giornale]]"
+	},
+	"ilmessaggero.it": {
+	  "name": "[[Il Messaggero]]"
+	},
+	"ilpost.it": {
+	  "name": "[[Il Post]]"
+	},
+	"ilsole24ore.com": {
+	  "name": "[[Il Sole 24 Ore]]"
+	},
+	"ansa.it": {
+	  "name": "[[ANSA]]"
+	},
+	"agi.it": {
+	  "name": "[[Agenzia Giornalistica Italia|AGI]]"
+	},
+	"adnkronos.com": {
+	  "name": "[[Adnkronos]]"
+	},
+	"rainews.it": {
+	  "name": "[[Rai News 24|Rai News]]"
+	},
+	"gazzetta.it": {
+	  "name": "[[La Gazzetta dello Sport]]"
+	},
+	"corrieredellosport.it": {
+	  "name": "[[Corriere dello Sport]]"
+	},
+	"tuttosport.com": {
+	  "name": "[[Tuttosport]]"
+	},
+	"calciomercato.com": {
+	  "name": "[[Calciomercato.com]]"
+	},
+	"nos.nl": {
+	  "name": "[[Nederlandse Omroep Stichting|NOS]]"
+	},
+	"nu.nl": {
+	  "name": "[[NU.nl]]"
+	},
+	"telegraaf.nl": {
+	  "name": "[[De Telegraaf]]"
+	},
+	"volkskrant.nl": {
+	  "name": "[[de Volkskrant]]"
+	},
+	"nrc.nl": {
+	  "name": "[[NRC Handelsblad|NRC]]"
+	},
+	"trouw.nl": {
+	  "name": "[[Trouw]]"
+	},
+	"parool.nl": {
+	  "name": "[[Het Parool]]"
+	},
+	"ad.nl": {
+	  "name": "[[Algemeen Dagblad]]"
+	},
+	"fd.nl": {
+	  "name": "[[Het Financieele Dagblad]]"
+	},
+	"rtl.nl": {
+	  "name": "[[RTL Nederland|RTL]]"
+	},
+	"dutchnews.nl": {
+	  "name": "[[DutchNews.nl]]"
+	},
+	"nltimes.nl": {
+	  "name": "[[NL Times]]"
+	},
+	"aftonbladet.se": {
+	  "name": "[[Aftonbladet]]"
+	},
+	"dn.se": {
+	  "name": "[[Dagens Nyheter]]"
+	},
+	"svd.se": {
+	  "name": "[[Svenska Dagbladet]]"
+	},
+	"expressen.se": {
+	  "name": "[[Expressen]]"
+	},
+	"vg.no": {
+	  "name": "[[Verdens Gang]]"
+	},
+	"dagbladet.no": {
+	  "name": "[[Dagbladet]]"
+	},
+	"aftenposten.no": {
+	  "name": "[[Aftenposten]]"
+	},
+	"berlingske.dk": {
+	  "name": "[[Berlingske]]"
+	},
+	"politiken.dk": {
+	  "name": "[[Politiken]]"
+	},
+	"bt.dk": {
+	  "name": "[[BT (dänische Zeitung)|BT]]"
+	},
+	"ap.org": {
+	  "name": "[[Associated Press]]"
+	},
+	"apnews.com": {
+	  "name": "[[Associated Press]]"
+	},
+	"afp.com": {
+	  "name": "[[Agence France-Presse]]"
+	},
+	"upi.com": {
+	  "name": "[[United Press International]]"
+	},
+	"tass.com": {
+	  "name": "[[TASS]]"
+	},
+	"xinhuanet.com": {
+	  "name": "[[Xinhua]]"
+	},
+	"un.org": {
+	  "name": "[[Vereinte Nationen]]"
+	},
+	"who.int": {
+	  "name": "[[Weltgesundheitsorganisation]]"
+	},
+	"worldbank.org": {
+	  "name": "[[Weltbank]]"
+	},
+	"imf.org": {
+	  "name": "[[Internationaler Währungsfonds]]"
+	},
+	"oecd.org": {
+	  "name": "[[OECD]]"
+	},
+	"europa.eu": {
+	  "name": "[[Europäische Union]]"
+	},
+	"gov.uk": {
+	  "name": "[[Regierung des Vereinigten Königreichs]]"
+	},
+	"whitehouse.gov": {
+	  "name": "[[Weißes Haus]]"
+	},
+	"cdc.gov": {
+	  "name": "[[Centers for Disease Control and Prevention]]"
+	},
+	"fda.gov": {
+	  "name": "[[Food and Drug Administration]]"
+	},
+	"nasa.gov": {
+	  "name": "[[NASA]]"
+	},
+	"nist.gov": {
+	  "name": "[[National Institute of Standards and Technology]]"
+	},
+	"jstor.org": {
+	  "name": "[[JSTOR]]"
+	},
+	"cambridge.org": {
+	  "name": "[[Cambridge University Press]]"
+	},
+	"oxforddictionaries.com": {
+	  "name": "[[Oxford English Dictionary|Oxford Dictionaries]]"
+	},
+	"britannica.com": {
+	  "name": "[[Encyclopædia Britannica]]"
+	},
+	"archive.org": {
+	  "name": "[[Internet Archive]]"
+	},
+	"worldcat.org": {
+	  "name": "[[WorldCat]]"
+	},
+	"pubmed.ncbi.nlm.nih.gov": {
+	  "name": "[[PubMed]]"
+	},
+	"ncbi.nlm.nih.gov": {
+	  "name": "[[National Center for Biotechnology Information]]"
+	},
+	"sciencedirect.com": {
+	  "name": "[[ScienceDirect]]"
+	},
+	"nobelprize.org": {
+	  "name": "[[Nobelpreis|nobelprize.org]]"
+	}
+  }
+}
