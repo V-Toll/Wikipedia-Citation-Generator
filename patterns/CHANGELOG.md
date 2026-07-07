@@ -6,6 +6,11 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.11 – 2026-07-07
+- The Canberra Times (`canberratimes.com.au`): sets the work name to "The Canberra Times"
+  (title and date already worked via meta tags). Note: the author byline is not present
+  in the page markup, so it cannot be extracted automatically.
+
 ## v2.0.10 – 2026-07-07
 - Broadcast (`broadcastnow.co.uk`): added author, title and date selectors.
 
