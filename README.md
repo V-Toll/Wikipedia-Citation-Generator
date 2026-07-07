@@ -5,7 +5,7 @@
 **Erzeugt aus Nachrichtenartikeln mit einem Tastendruck fertige
 `{{Internetquelle}}`-Einzelnachweise für die deutschsprachige Wikipedia.**
 
-[![Version](https://img.shields.io/badge/version-2.2.3-2b7bba)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-2b7bba)](CHANGELOG.md)
 [![Seiten](https://img.shields.io/badge/unterst%C3%BCtzte%20Seiten-209-e67e22)](patterns/site-patterns.json)
 [![Lizenz](https://img.shields.io/badge/Lizenz-Unlicense-2ecc71)](LICENSE)
 [![Userscript](https://img.shields.io/badge/Userscript-Violentmonkey%20%7C%20Tampermonkey-673ab7)](#-installation)
@@ -38,6 +38,8 @@ sich der fertige Einzelnachweis in die Zwischenablage kopieren:
 - **Automatischer Dark Mode** (folgt dem System) plus manueller Umschalter
   Auto / Hell / Dunkel.
 - **Eingebauter Changelog**, erreichbar über das Versions-Badge im Fenster.
+- **Citation-Generator-Modus** (optional): ein schwebender Button unten rechts auf
+  jeder Seite öffnet den Generator (nicht auf Wikimedia-Seiten).
 - **Selbstaktualisierend:** Skript (über `@updateURL`) und Muster-Datenbank
   (täglich, plus Button 🔄) halten sich selbst aktuell.
 

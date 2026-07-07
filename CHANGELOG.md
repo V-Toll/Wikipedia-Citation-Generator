@@ -6,6 +6,10 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.3.0 "Beacon" – 2026-07-07
+- New option "Citation-Generator-Modus" (off by default): shows a small floating button at the bottom-right of every site that opens the generator.
+- The button does not appear on Wikipedia, Wikimedia Commons and related Wikimedia sites.
+
 ## v2.2.3 – 2026-07-07
 - English long-form dates like "17 November 2008" are now recognized correctly.
 

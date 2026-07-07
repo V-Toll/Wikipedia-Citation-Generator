@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.2.3
+// @version      2.3.0
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.2.3',
+		version: '2.3.0',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -33,7 +33,8 @@
 			lastUpdate: 'wcg_last_db_update',
 			theme: 'wcg_theme',  // 'auto' | 'light' | 'dark'
 			optGermanLang: 'wcg_opt_german_lang',  // emit sprache=de for German sources (default off)
-			optPlainWerk: 'wcg_opt_plain_werk'     // strip [[…]] wikilinks in werk (default off)
+			optPlainWerk: 'wcg_opt_plain_werk',    // strip [[…]] wikilinks in werk (default off)
+			optFab: 'wcg_opt_fab'                  // show floating button on every site (default off)
 		},
 		ui: {
 			modalId: 'wcg-modal',
@@ -51,6 +52,15 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.3.0',
+			name: 'Beacon',
+			date: '2026-07-07',
+			changes: [
+				'Neue Option „Citation-Generator-Modus“ (standardmäßig aus): blendet unten rechts auf jeder Seite einen schwebenden Button ein, der den Generator öffnet.',
+				'Der Button erscheint nicht auf Wikipedia-, Wikimedia-Commons- und verwandten Wikimedia-Seiten.'
+			]
+		},
 		{
 			version: '2.2.3',
 			name: null,
@@ -172,8 +182,46 @@
 	function getOptions() {
 		return {
 			germanLang: GM_getValue(CONFIG.storage.optGermanLang, false),  // add sprache=de for German
-			plainWerk:  GM_getValue(CONFIG.storage.optPlainWerk, false)    // remove [[…]] in werk
+			plainWerk:  GM_getValue(CONFIG.storage.optPlainWerk, false),   // remove [[…]] in werk
+			fab:        GM_getValue(CONFIG.storage.optFab, false)          // floating button on every site
 		};
+	}
+
+	/**
+	 * Wikimedia-family sites where the floating button should never appear
+	 * (you don't cite Wikipedia on Wikipedia). Note: wikipedia.org is already
+	 * excluded for the whole script via @exclude / the init() guard.
+	 */
+	function isExcludedSite() {
+		return /(?:^|\.)(?:wikipedia|wikimedia|wiktionary|wikidata|wikisource|wikivoyage|wikinews|wikibooks|wikiquote|wikiversity|mediawiki|wikimediafoundation)\.org$/i
+			.test(window.location.hostname);
+	}
+
+	/**
+	 * Create or remove the floating "Citation Generator" button depending on the
+	 * option and the current site. Safe to call repeatedly (idempotent).
+	 */
+	function renderFloatingButton() {
+		const existing = document.getElementById('wcg-fab');
+		const shouldShow = getOptions().fab && !isExcludedSite();
+
+		if (!shouldShow) {
+			if (existing) existing.remove();
+			return;
+		}
+		if (existing) return;  // already shown
+
+		const fab = document.createElement('button');
+		fab.id = 'wcg-fab';
+		fab.type = 'button';
+		fab.textContent = '📋';
+		fab.title = 'Wikipedia Citation Generator öffnen';
+		fab.setAttribute('aria-label', 'Wikipedia Citation Generator öffnen');
+		fab.addEventListener('click', async () => {
+			const metadata = await extractAllMetadata();
+			showCitationModal(metadata);
+		});
+		document.body.appendChild(fab);
 	}
 
 	/**
@@ -1247,6 +1295,35 @@
 				border-radius: 4px !important;
 			}
 
+			/* Floating "Citation Generator" button (optional, bottom-right) */
+			#wcg-fab {
+				position: fixed !important;
+				right: 20px !important;
+				bottom: 20px !important;
+				width: 52px !important;
+				height: 52px !important;
+				padding: 0 !important;
+				margin: 0 !important;
+				border: none !important;
+				border-radius: 50% !important;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+				color: #fff !important;
+				font-size: 22px !important;
+				line-height: 1 !important;
+				cursor: pointer !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				box-shadow: 0 6px 18px rgba(102, 126, 234, 0.45) !important;
+				z-index: 2147483640 !important;
+				transition: transform 0.15s, box-shadow 0.15s !important;
+			}
+			#wcg-fab:hover {
+				transform: translateY(-2px) scale(1.05) !important;
+				box-shadow: 0 8px 24px rgba(102, 126, 234, 0.55) !important;
+			}
+			#wcg-fab:active { transform: scale(0.97) !important; }
+
 			/* ---- Changelog modal ---- */
 			.wcg-changelog-content {
 				padding: 24px 28px !important;
@@ -1370,6 +1447,11 @@
 					<label class="wcg-toggle">
 						<span class="wcg-toggle-text">Wikilinks im Werk entfernen (<code>[[…]]</code>)</span>
 						<input type="checkbox" id="wcg-opt-plainwerk" ${opts.plainWerk ? 'checked' : ''}>
+						<span class="wcg-toggle-track"></span>
+					</label>
+					<label class="wcg-toggle">
+						<span class="wcg-toggle-text">Citation-Generator-Modus: schwebender Button auf jeder Seite</span>
+						<input type="checkbox" id="wcg-opt-fab" ${opts.fab ? 'checked' : ''}>
 						<span class="wcg-toggle-track"></span>
 					</label>
 				</div>
@@ -1521,6 +1603,11 @@
 			GM_setValue(CONFIG.storage.optPlainWerk, e.target.checked);
 			modalFunctions.updateCitation();
 		});
+		// Floating-button option: persist and show/hide it immediately.
+		modal.querySelector('#wcg-opt-fab').addEventListener('change', (e) => {
+			GM_setValue(CONFIG.storage.optFab, e.target.checked);
+			renderFloatingButton();
+		});
 
 		modal.querySelectorAll('[data-select]').forEach(btn => {
 			btn.addEventListener('click', (e) => {
@@ -1556,6 +1643,7 @@
 		
 		addStyles();
 		applyTheme(getTheme());  // tag <html> so the auto/manual palette applies right away
+		renderFloatingButton();  // show the floating button if the option is enabled
 
 		// Hotkey: Ctrl+Shift+C
 		document.addEventListener('keydown', async (e) => {
