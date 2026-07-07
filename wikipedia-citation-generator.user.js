@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.3.0
+// @version      2.3.1
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.3.0',
+		version: '2.3.1',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -52,6 +52,14 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.3.1',
+			name: null,
+			date: '2026-07-07',
+			changes: [
+				'Der schwebende Button ist jetzt nur noch halb so groß.'
+			]
+		},
 		{
 			version: '2.3.0',
 			name: 'Beacon',
@@ -1300,15 +1308,15 @@
 				position: fixed !important;
 				right: 20px !important;
 				bottom: 20px !important;
-				width: 52px !important;
-				height: 52px !important;
+				width: 26px !important;
+				height: 26px !important;
 				padding: 0 !important;
 				margin: 0 !important;
 				border: none !important;
 				border-radius: 50% !important;
 				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
 				color: #fff !important;
-				font-size: 22px !important;
+				font-size: 13px !important;
 				line-height: 1 !important;
 				cursor: pointer !important;
 				display: flex !important;
