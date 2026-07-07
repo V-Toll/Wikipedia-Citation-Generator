@@ -1,6 +1,6 @@
 {
-  "version": "2.0.9",
-  "lastUpdated": "2026-07-02T00:00:00Z",
+  "version": "2.0.10",
+  "lastUpdated": "2026-07-07T00:00:00Z",
   "description": "Pattern database for the Wikipedia Citation Generator (Userscript)",
   "patterns": {
 	"spiegel.de": {
@@ -487,6 +487,13 @@
 		"title": "h1, .content__headline",
 		"author": "a[rel=\"author\"], .byline, .contributor-byline",
 		"date": "time, .content__dateline-wpd"
+	  }
+	},
+	"broadcastnow.co.uk": {
+	  "selectors": {
+		"title": "h1",
+		"author": "a[rel=\"author\"]",
+		"date": "[data-date-timezone], .date"
 	  }
 	},
 	"bbc.com": {

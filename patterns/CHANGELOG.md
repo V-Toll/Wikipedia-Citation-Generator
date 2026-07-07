@@ -6,6 +6,9 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.10 – 2026-07-07
+- Broadcast (`broadcastnow.co.uk`): added author, title and date selectors.
+
 ## v2.0.9 – 2026-07-02
 - Der Spiegel (`spiegel.de`): author is now read from the byline (author-profile
   link or the abbreviation byline) instead of the footer, so magazine brand

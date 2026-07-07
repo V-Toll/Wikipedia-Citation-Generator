@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.2.2
+// @version      2.2.3
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.2.2',
+		version: '2.2.3',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -51,6 +51,14 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.2.3',
+			name: null,
+			date: '2026-07-07',
+			changes: [
+				'Englische Langdaten wie „17 November 2008“ werden jetzt korrekt als Datum erkannt.'
+			]
+		},
 		{
 			version: '2.2.2',
 			name: null,
@@ -205,10 +213,27 @@
 
 	function normalizeDate(dateString) {
 		if (!dateString) return '';
-		
-		let dateStr = String(dateString).trim();
-		dateStr = dateStr.split(/[\sT,]/)[0];
-		
+
+		const raw = String(dateString).trim();
+
+		// English long-form dates, e.g. "17 November 2008" or "November 17, 2008".
+		// Handled before the whitespace split below, which would otherwise discard the month/year.
+		const monthNames = {
+			january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+			july: 7, august: 8, september: 9, october: 10, november: 11, december: 12
+		};
+		let em;
+		if ((em = raw.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/))) {          // 17 November 2008
+			const mo = monthNames[em[2].toLowerCase()];
+			if (mo) return `${em[3]}-${String(mo).padStart(2, '0')}-${String(em[1]).padStart(2, '0')}`;
+		}
+		if ((em = raw.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/))) {          // November 17, 2008
+			const mo = monthNames[em[1].toLowerCase()];
+			if (mo) return `${em[3]}-${String(mo).padStart(2, '0')}-${String(em[2]).padStart(2, '0')}`;
+		}
+
+		let dateStr = raw.split(/[\sT,]/)[0];
+
 		if (/^heute$/i.test(dateStr)) return getCurrentDate();
 		
 		if (/^gestern$/i.test(dateStr)) {

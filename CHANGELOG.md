@@ -6,6 +6,9 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.2.3 – 2026-07-07
+- English long-form dates like "17 November 2008" are now recognized correctly.
+
 ## v2.2.2 – 2026-07-02
 - The "Zitation" field is now a bit taller.
 - Removed the "Abbrechen" button — the window is closed via the ✕ at the top right.
