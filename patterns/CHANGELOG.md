@@ -6,6 +6,10 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.14 – 2026-07-09
+- GameStar (`gamestar.de`): added author selector (`a.author-name`) and set the work
+  name to `[[GameStar]]`; title and date already worked via meta tags.
+
 ## v2.0.13 – 2026-07-08
 - The Independent (`independent.co.uk`): added author extraction from the byline
   (`address a[href*="/author/"]`). The work name now uses the existing wikilink
