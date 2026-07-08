@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.4.1
+// @version      2.5.0
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.4.1',
+		version: '2.5.0',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -55,6 +55,15 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.5.0',
+			name: 'Liftoff',
+			date: '2026-07-09',
+			changes: [
+				'Optionen sind jetzt über ein Zahnrad-Symbol (⚙️) oben neben Design- und Schließen-Button erreichbar.',
+				'Der Citation-Generator-Modus ist ein eigener Raketen-Button (🚀) – beim Aktivieren startet eine kleine Raketen-Animation.'
+			]
+		},
 		{
 			version: '2.4.1',
 			name: null,
@@ -260,6 +269,28 @@
 			showCitationModal(metadata);
 		});
 		document.body.appendChild(fab);
+	}
+
+	/** Fun rocket-launch + spark burst, played when the floating button is enabled. */
+	function playCelebration() {
+		const rocket = document.createElement('div');
+		rocket.className = 'wcg-rocket';
+		rocket.textContent = '🚀';
+		rocket.addEventListener('animationend', () => rocket.remove());
+		document.body.appendChild(rocket);
+
+		// Small upward-left spark burst around the launch point.
+		const sparks = ['✨', '⭐', '💫', '✨', '⭐'];
+		const offsets = [[-60, -40], [-30, -70], [0, -80], [-70, -10], [-45, -55]];
+		sparks.forEach((glyph, idx) => {
+			const el = document.createElement('div');
+			el.className = 'wcg-spark';
+			el.textContent = glyph;
+			el.style.setProperty('--dx', offsets[idx][0] + 'px');
+			el.style.setProperty('--dy', offsets[idx][1] + 'px');
+			el.addEventListener('animationend', () => el.remove());
+			document.body.appendChild(el);
+		});
 	}
 
 	/**
@@ -1178,7 +1209,7 @@
 
 			.wcg-header-actions { display: flex !important; align-items: center !important; gap: 8px !important; }
 
-			.wcg-modal-close, .wcg-theme-toggle {
+			.wcg-modal-close, .wcg-theme-toggle, .wcg-hdr-btn {
 				background: rgba(255, 255, 255, 0.15) !important;
 				border: none !important;
 				color: white !important;
@@ -1195,7 +1226,9 @@
 				line-height: 1 !important;
 			}
 			.wcg-modal-close { font-size: 24px !important; }
-			.wcg-modal-close:hover, .wcg-theme-toggle:hover { background: rgba(255, 255, 255, 0.25) !important; }
+			.wcg-modal-close:hover, .wcg-theme-toggle:hover, .wcg-hdr-btn:hover { background: rgba(255, 255, 255, 0.25) !important; }
+			.wcg-hdr-btn { font-size: 18px !important; }
+			.wcg-fab-btn.wcg-active { background: rgba(255, 255, 255, 0.40) !important; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25) inset !important; }
 			
 			.wcg-modal-content { padding: 18px 24px !important; flex: 1 1 auto !important; min-height: 0 !important; overflow-y: auto !important; }
 			.wcg-form-group { margin-bottom: 12px !important; }
@@ -1242,32 +1275,12 @@
 				background: var(--wcg-secondary-bg) !important;
 				border: 1px solid var(--wcg-border) !important;
 				border-radius: 12px !important;
-				padding: 0 14px !important;
+				padding: 4px 14px !important;
 				margin-bottom: 16px !important;
 			}
-			/* Collapsible header (click to expand/collapse the toggles) */
-			.wcg-options-title {
-				display: flex !important;
-				align-items: center !important;
-				justify-content: space-between !important;
-				width: 100% !important;
-				background: none !important;
-				border: none !important;
-				cursor: pointer !important;
-				font-size: 11px !important;
-				font-weight: 700 !important;
-				text-transform: uppercase !important;
-				letter-spacing: 0.6px !important;
-				color: var(--wcg-text-muted) !important;
-				font-family: inherit !important;
-				padding: 11px 0 !important;
-			}
-			.wcg-options-meta { display: flex !important; align-items: center !important; gap: 8px !important; text-transform: none !important; letter-spacing: 0 !important; }
-			.wcg-options-count { font-weight: 600 !important; opacity: 0.85 !important; }
-			.wcg-options-chevron { font-size: 10px !important; transition: transform 0.2s !important; }
-			.wcg-options.wcg-collapsed .wcg-options-chevron { transform: rotate(-90deg) !important; }
-			.wcg-options.wcg-collapsed .wcg-options-body { display: none !important; }
-			.wcg-options-body { border-top: 1px solid var(--wcg-border) !important; padding-bottom: 4px !important; }
+			/* Options panel is toggled by the ⚙️ header button; hidden when collapsed */
+			.wcg-options.wcg-collapsed { display: none !important; }
+			.wcg-options-body { padding: 2px 0 4px !important; }
 			.wcg-toggle {
 				display: flex !important;
 				align-items: center !important;
@@ -1425,6 +1438,19 @@
 			}
 			#wcg-fab:active { transform: scale(0.97) !important; }
 
+			/* Celebration when Citation-Generator-Modus is switched on */
+			@keyframes wcg-launch {
+				0%   { transform: translate(0, 0) rotate(-45deg) scale(0.6); opacity: 0; }
+				12%  { transform: translate(0, -12px) rotate(-45deg) scale(1); opacity: 1; }
+				100% { transform: translate(-60px, -110vh) rotate(-45deg) scale(1.15); opacity: 0; }
+			}
+			@keyframes wcg-spark {
+				0%   { transform: translate(0, 0) scale(0.3); opacity: 1; }
+				100% { transform: translate(var(--dx), var(--dy)) scale(1); opacity: 0; }
+			}
+			.wcg-rocket { position: fixed !important; right: 26px !important; bottom: 26px !important; font-size: 40px !important; line-height: 1 !important; z-index: 2147483647 !important; pointer-events: none !important; animation: wcg-launch 1.5s ease-in forwards !important; }
+			.wcg-spark { position: fixed !important; right: 36px !important; bottom: 42px !important; font-size: 18px !important; z-index: 2147483647 !important; pointer-events: none !important; animation: wcg-spark 0.9s ease-out forwards !important; }
+
 			/* ---- Changelog modal ---- */
 			.wcg-changelog-content {
 				padding: 24px 28px !important;
@@ -1518,7 +1544,6 @@
 		
 		const opts = getOptions();
 		const optExpanded = GM_getValue(CONFIG.storage.optExpanded, false);  // options panel collapsed by default
-		const activeCount = [opts.germanLang, opts.plainWerk, opts.noRef, opts.refName, opts.fab].filter(Boolean).length;
 
 		const overlay = document.createElement('div');
 		overlay.className = 'wcg-overlay';
@@ -1535,13 +1560,14 @@
 					<div class="wcg-db-info">📦 Database v${dbVersion} • ${hoursAgo}h alt</div>
 				</div>
 				<div class="wcg-header-actions">
+						<button class="wcg-hdr-btn" type="button" id="wcg-options-btn" title="Optionen" aria-label="Optionen">⚙️</button>
+						<button class="wcg-hdr-btn wcg-fab-btn${opts.fab ? ' wcg-active' : ''}" type="button" id="wcg-fab-btn" title="Citation-Generator-Modus (schwebender Button)" aria-label="Citation-Generator-Modus umschalten">🚀</button>
 						<button class="wcg-theme-toggle" type="button" id="wcg-theme-toggle"></button>
 						<button class="wcg-modal-close" type="button">&times;</button>
 					</div>
 			</div>
 			<div class="wcg-modal-content">
-				<div class="wcg-options${optExpanded ? '' : ' wcg-collapsed'}">
-					<button type="button" class="wcg-options-title" id="wcg-options-toggle"><span>⚙️ Optionen</span><span class="wcg-options-meta"><span class="wcg-options-count">${activeCount ? activeCount + ' aktiv' : ''}</span><span class="wcg-options-chevron">▾</span></span></button>
+				<div class="wcg-options${optExpanded ? '' : ' wcg-collapsed'}" id="wcg-options">
 					<div class="wcg-options-body">
 					<label class="wcg-toggle">
 						<span class="wcg-toggle-text">Bei deutschsprachigen Quellen <code>sprache=de</code> setzen</span>
@@ -1561,11 +1587,6 @@
 					<label class="wcg-toggle">
 						<span class="wcg-toggle-text">Benannter Einzelnachweis <code>&lt;ref name="…"&gt;</code></span>
 						<input type="checkbox" id="wcg-opt-refname" ${opts.refName ? 'checked' : ''}>
-						<span class="wcg-toggle-track"></span>
-					</label>
-					<label class="wcg-toggle">
-						<span class="wcg-toggle-text">Citation-Generator-Modus: schwebender Button auf jeder Seite</span>
-						<input type="checkbox" id="wcg-opt-fab" ${opts.fab ? 'checked' : ''}>
 						<span class="wcg-toggle-track"></span>
 					</label>
 					</div>
@@ -1709,47 +1730,37 @@
 		// Version badge opens the changelog.
 		modal.querySelector('#wcg-version-badge').addEventListener('click', showChangelogModal);
 
-		// Collapsible options panel: remember the expanded state; the chevron animates via CSS.
-		modal.querySelector('#wcg-options-toggle').addEventListener('click', () => {
-			const collapsed = modal.querySelector('.wcg-options').classList.toggle('wcg-collapsed');
+		// Options panel is toggled by the ⚙️ header button.
+		modal.querySelector('#wcg-options-btn').addEventListener('click', () => {
+			const collapsed = modal.querySelector('#wcg-options').classList.toggle('wcg-collapsed');
 			GM_setValue(CONFIG.storage.optExpanded, !collapsed);
 		});
 
-		// Keep the "N aktiv" counter in the header in sync with the toggles.
-		const refreshOptCount = () => {
-			const el = modal.querySelector('.wcg-options-count');
-			if (!el) return;
-			const o = getOptions();
-			const n = [o.germanLang, o.plainWerk, o.noRef, o.refName, o.fab].filter(Boolean).length;
-			el.textContent = n ? n + ' aktiv' : '';
-		};
+		// Citation-Generator-Modus button: toggle the floating button; celebrate when enabling.
+		modal.querySelector('#wcg-fab-btn').addEventListener('click', (e) => {
+			const on = !GM_getValue(CONFIG.storage.optFab, false);
+			GM_setValue(CONFIG.storage.optFab, on);
+			e.currentTarget.classList.toggle('wcg-active', on);
+			renderFloatingButton();
+			if (on) playCelebration();
+		});
 
-		// Citation options: persist the choice, update the counter and regenerate the preview.
+		// Citation options: persist the choice and regenerate the preview immediately.
 		modal.querySelector('#wcg-opt-german').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optGermanLang, e.target.checked);
-			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-plainwerk').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optPlainWerk, e.target.checked);
-			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-noref').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optNoRef, e.target.checked);
-			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-refname').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optRefName, e.target.checked);
-			refreshOptCount();
 			modalFunctions.updateCitation();
-		});
-		// Floating-button option: persist and show/hide it immediately.
-		modal.querySelector('#wcg-opt-fab').addEventListener('change', (e) => {
-			GM_setValue(CONFIG.storage.optFab, e.target.checked);
-			refreshOptCount();
-			renderFloatingButton();
 		});
 
 		modal.querySelectorAll('[data-select]').forEach(btn => {

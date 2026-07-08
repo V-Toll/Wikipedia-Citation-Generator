@@ -6,6 +6,10 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.5.0 "Liftoff" – 2026-07-09
+- Options are now opened via a gear button (⚙️) in the header, next to the theme and close buttons.
+- Citation-Generator-Modus is its own rocket button (🚀); enabling it plays a little rocket-launch animation.
+
 ## v2.4.1 – 2026-07-09
 - The options area is now collapsible (collapsed by default) and shows the number of active options — more compact and sleeker.
 
