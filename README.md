@@ -5,7 +5,7 @@
 **Erzeugt aus Nachrichtenartikeln mit einem Tastendruck fertige
 `{{Internetquelle}}`-Einzelnachweise für die deutschsprachige Wikipedia.**
 
-[![Version](https://img.shields.io/badge/version-2.4.0-2b7bba)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.4.1-2b7bba)](CHANGELOG.md)
 [![Seiten](https://img.shields.io/badge/unterst%C3%BCtzte%20Seiten-209-e67e22)](patterns/site-patterns.json)
 [![Lizenz](https://img.shields.io/badge/Lizenz-Unlicense-2ecc71)](LICENSE)
 [![Userscript](https://img.shields.io/badge/Userscript-Violentmonkey%20%7C%20Tampermonkey-673ab7)](#-installation)

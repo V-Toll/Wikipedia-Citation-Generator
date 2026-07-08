@@ -6,6 +6,9 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.4.1 – 2026-07-09
+- The options area is now collapsible (collapsed by default) and shows the number of active options — more compact and sleeker.
+
 ## v2.4.0 "Anchor" – 2026-07-09
 - New option: omit the `<ref></ref>` wrapper when copying (off by default) — copies just the `{{Internetquelle}}` template.
 - New option: named reference `<ref name="…">` with an auto-generated short, unique name (off by default).

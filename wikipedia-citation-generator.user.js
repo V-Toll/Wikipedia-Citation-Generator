@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.4.0
+// @version      2.4.1
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.4.0',
+		version: '2.4.1',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -36,7 +36,8 @@
 			optPlainWerk: 'wcg_opt_plain_werk',    // strip [[…]] wikilinks in werk (default off)
 			optFab: 'wcg_opt_fab',                 // show floating button on every site (default off)
 			optNoRef: 'wcg_opt_no_ref',            // omit the <ref></ref> wrapper (default off)
-			optRefName: 'wcg_opt_ref_name'         // add name="…" to the <ref> (default off)
+			optRefName: 'wcg_opt_ref_name',        // add name="…" to the <ref> (default off)
+			optExpanded: 'wcg_opt_expanded'        // options panel expanded? (default collapsed)
 		},
 		ui: {
 			modalId: 'wcg-modal',
@@ -54,6 +55,14 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.4.1',
+			name: null,
+			date: '2026-07-09',
+			changes: [
+				'Der Optionen-Bereich ist jetzt einklappbar (standardmäßig zugeklappt) und zeigt die Anzahl aktiver Optionen – kompakter und aufgeräumter.'
+			]
+		},
 		{
 			version: '2.4.0',
 			name: 'Anchor',
@@ -1233,23 +1242,38 @@
 				background: var(--wcg-secondary-bg) !important;
 				border: 1px solid var(--wcg-border) !important;
 				border-radius: 12px !important;
-				padding: 2px 14px !important;
+				padding: 0 14px !important;
 				margin-bottom: 16px !important;
 			}
+			/* Collapsible header (click to expand/collapse the toggles) */
 			.wcg-options-title {
+				display: flex !important;
+				align-items: center !important;
+				justify-content: space-between !important;
+				width: 100% !important;
+				background: none !important;
+				border: none !important;
+				cursor: pointer !important;
 				font-size: 11px !important;
 				font-weight: 700 !important;
 				text-transform: uppercase !important;
 				letter-spacing: 0.6px !important;
 				color: var(--wcg-text-muted) !important;
-				padding: 10px 0 2px !important;
+				font-family: inherit !important;
+				padding: 11px 0 !important;
 			}
+			.wcg-options-meta { display: flex !important; align-items: center !important; gap: 8px !important; text-transform: none !important; letter-spacing: 0 !important; }
+			.wcg-options-count { font-weight: 600 !important; opacity: 0.85 !important; }
+			.wcg-options-chevron { font-size: 10px !important; transition: transform 0.2s !important; }
+			.wcg-options.wcg-collapsed .wcg-options-chevron { transform: rotate(-90deg) !important; }
+			.wcg-options.wcg-collapsed .wcg-options-body { display: none !important; }
+			.wcg-options-body { border-top: 1px solid var(--wcg-border) !important; padding-bottom: 4px !important; }
 			.wcg-toggle {
 				display: flex !important;
 				align-items: center !important;
 				justify-content: space-between !important;
 				gap: 14px !important;
-				padding: 11px 0 !important;
+				padding: 9px 0 !important;
 				cursor: pointer !important;
 			}
 			.wcg-toggle + .wcg-toggle { border-top: 1px solid var(--wcg-border) !important; }
@@ -1493,6 +1517,8 @@
 		const hasLearned = learnedPatterns[hostname]?.learned || {};
 		
 		const opts = getOptions();
+		const optExpanded = GM_getValue(CONFIG.storage.optExpanded, false);  // options panel collapsed by default
+		const activeCount = [opts.germanLang, opts.plainWerk, opts.noRef, opts.refName, opts.fab].filter(Boolean).length;
 
 		const overlay = document.createElement('div');
 		overlay.className = 'wcg-overlay';
@@ -1514,8 +1540,9 @@
 					</div>
 			</div>
 			<div class="wcg-modal-content">
-				<div class="wcg-options">
-					<div class="wcg-options-title">⚙️ Optionen</div>
+				<div class="wcg-options${optExpanded ? '' : ' wcg-collapsed'}">
+					<button type="button" class="wcg-options-title" id="wcg-options-toggle"><span>⚙️ Optionen</span><span class="wcg-options-meta"><span class="wcg-options-count">${activeCount ? activeCount + ' aktiv' : ''}</span><span class="wcg-options-chevron">▾</span></span></button>
+					<div class="wcg-options-body">
 					<label class="wcg-toggle">
 						<span class="wcg-toggle-text">Bei deutschsprachigen Quellen <code>sprache=de</code> setzen</span>
 						<input type="checkbox" id="wcg-opt-german" ${opts.germanLang ? 'checked' : ''}>
@@ -1541,6 +1568,7 @@
 						<input type="checkbox" id="wcg-opt-fab" ${opts.fab ? 'checked' : ''}>
 						<span class="wcg-toggle-track"></span>
 					</label>
+					</div>
 				</div>
 				<form id="wcg-form">
 					<div class="wcg-form-group${hasLearned.author ? ' wcg-learned' : ''}">
@@ -1681,26 +1709,46 @@
 		// Version badge opens the changelog.
 		modal.querySelector('#wcg-version-badge').addEventListener('click', showChangelogModal);
 
-		// Citation options: persist the choice and regenerate the preview immediately.
+		// Collapsible options panel: remember the expanded state; the chevron animates via CSS.
+		modal.querySelector('#wcg-options-toggle').addEventListener('click', () => {
+			const collapsed = modal.querySelector('.wcg-options').classList.toggle('wcg-collapsed');
+			GM_setValue(CONFIG.storage.optExpanded, !collapsed);
+		});
+
+		// Keep the "N aktiv" counter in the header in sync with the toggles.
+		const refreshOptCount = () => {
+			const el = modal.querySelector('.wcg-options-count');
+			if (!el) return;
+			const o = getOptions();
+			const n = [o.germanLang, o.plainWerk, o.noRef, o.refName, o.fab].filter(Boolean).length;
+			el.textContent = n ? n + ' aktiv' : '';
+		};
+
+		// Citation options: persist the choice, update the counter and regenerate the preview.
 		modal.querySelector('#wcg-opt-german').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optGermanLang, e.target.checked);
+			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-plainwerk').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optPlainWerk, e.target.checked);
+			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-noref').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optNoRef, e.target.checked);
+			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		modal.querySelector('#wcg-opt-refname').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optRefName, e.target.checked);
+			refreshOptCount();
 			modalFunctions.updateCitation();
 		});
 		// Floating-button option: persist and show/hide it immediately.
 		modal.querySelector('#wcg-opt-fab').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optFab, e.target.checked);
+			refreshOptCount();
 			renderFloatingButton();
 		});
 
