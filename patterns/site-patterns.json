@@ -496,11 +496,6 @@
 		"date": "[data-date-timezone], .date"
 	  }
 	},
-	"independent.co.uk": {
-	  "selectors": {
-		"author": "address a[href*=\"/author/\"]"
-	  }
-	},
 	"canberratimes.com.au": {
 	  "name": "The Canberra Times",
 	  "selectors": {
@@ -594,7 +589,10 @@
 	  "name": "[[Daily Mail]]"
 	},
 	"independent.co.uk": {
-	  "name": "[[The Independent]]"
+	  "name": "[[The Independent]]",
+	  "selectors": {
+		"author": "address a[href*=\"/author/\"]"
+	  }
 	},
 	"telegraph.co.uk": {
 	  "name": "[[The Daily Telegraph|The Telegraph]]",
