@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.3.1
+// @version      2.3.2
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.3.1',
+		version: '2.3.2',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -52,6 +52,14 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.3.2',
+			name: null,
+			date: '2026-07-07',
+			changes: [
+				'Neuer Autoren-Modus für Bylines in Großbuchstaben (z. B. „SCOTT HANNAFORD“ → „Scott Hannaford“), genutzt von The Canberra Times.'
+			]
+		},
 		{
 			version: '2.3.1',
 			name: null,
@@ -423,7 +431,7 @@
 		} else if (processing === 'transfermarkt') {
 			cleaned = cleaned.replace(/\s+TM-Username:.*$/i, '');
 			cleaned = cleaned.replace(/\s+@[a-zA-Z0-9_]+.*$/i, '');
-			
+
 			if (siteInfo.filterAgencies) {
 				for (const agency of siteInfo.filterAgencies) {
 					if (new RegExp(`\\b${agency}\\b`, 'i').test(cleaned)) {
@@ -432,8 +440,16 @@
 					}
 				}
 			}
+		} else if (processing === 'uppercase-byline') {
+			// Byline is embedded as ALL-CAPS bold text (e.g. "SCOTT HANNAFORD").
+			// Only accept multi-word ALL-CAPS candidates; convert them to title case.
+			// This filters out ordinary bold text in the article body (usually mixed case).
+			if (!/^[A-ZÄÖÜ][A-ZÄÖÜ.'\-]*(?:\s+[A-ZÄÖÜ][A-ZÄÖÜ.'\-]*)+$/.test(cleaned)) {
+				return '';
+			}
+			cleaned = cleaned.replace(/\S+/g, w => w.charAt(0) + w.slice(1).toLowerCase());
 		}
-		
+
 		return cleaned.trim();
 	}
 

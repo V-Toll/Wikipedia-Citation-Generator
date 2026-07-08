@@ -6,6 +6,9 @@ database has its **own, separate** changelog in
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.3.2 – 2026-07-07
+- New author mode for ALL-CAPS bylines (e.g. "SCOTT HANNAFORD" → "Scott Hannaford"), used by The Canberra Times.
+
 ## v2.3.1 – 2026-07-07
 - The floating button is now half the size.
 

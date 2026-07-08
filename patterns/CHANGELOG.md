@@ -6,6 +6,10 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.12 – 2026-07-07
+- The Canberra Times (`canberratimes.com.au`): added author extraction from the
+  ALL-CAPS byline in the article body (requires the script's "uppercase-byline" mode).
+
 ## v2.0.11 – 2026-07-07
 - The Canberra Times (`canberratimes.com.au`): sets the work name to "The Canberra Times"
   (title and date already worked via meta tags). Note: the author byline is not present

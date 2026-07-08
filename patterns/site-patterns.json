@@ -1,6 +1,6 @@
 {
-  "version": "2.0.11",
-  "lastUpdated": "2026-07-07T12:00:00Z",
+  "version": "2.0.12",
+  "lastUpdated": "2026-07-07T13:00:00Z",
   "description": "Pattern database for the Wikipedia Citation Generator (Userscript)",
   "patterns": {
 	"spiegel.de": {
@@ -499,8 +499,10 @@
 	"canberratimes.com.au": {
 	  "name": "The Canberra Times",
 	  "selectors": {
-		"title": "h1"
-	  }
+		"title": "h1",
+		"author": ".paywall-content strong"
+	  },
+	  "authorProcessing": "uppercase-byline"
 	},
 	"bbc.com": {
 	  "name": "[[BBC]]",
