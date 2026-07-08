@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wikipedia Citation Generator
 // @namespace    https://github.com/V-Toll
-// @version      2.3.2
+// @version      2.4.0
 // @description  German Wikipedia {{Internetquelle}} citation generator - Enhanced error handling
 // @author       V-Toll
 // @homepageURL  https://github.com/V-Toll/Wikipedia-Citation-Generator
@@ -24,7 +24,7 @@
 	'use strict';
 
 	const CONFIG = {
-		version: '2.3.2',
+		version: '2.4.0',
 		debug: true,
 		storage: {
 			learnedPatterns: 'wcg_learned_patterns',
@@ -34,7 +34,9 @@
 			theme: 'wcg_theme',  // 'auto' | 'light' | 'dark'
 			optGermanLang: 'wcg_opt_german_lang',  // emit sprache=de for German sources (default off)
 			optPlainWerk: 'wcg_opt_plain_werk',    // strip [[…]] wikilinks in werk (default off)
-			optFab: 'wcg_opt_fab'                  // show floating button on every site (default off)
+			optFab: 'wcg_opt_fab',                 // show floating button on every site (default off)
+			optNoRef: 'wcg_opt_no_ref',            // omit the <ref></ref> wrapper (default off)
+			optRefName: 'wcg_opt_ref_name'         // add name="…" to the <ref> (default off)
 		},
 		ui: {
 			modalId: 'wcg-modal',
@@ -52,6 +54,15 @@
 	// Keep old entries — only ever prepend new ones.
 	// ================================
 	const CHANGELOG = [
+		{
+			version: '2.4.0',
+			name: 'Anchor',
+			date: '2026-07-09',
+			changes: [
+				'Neue Option: <ref></ref>-Tags beim Kopieren weglassen (standardmäßig aus) – kopiert dann nur die {{Internetquelle}}-Vorlage.',
+				'Neue Option: benannter Einzelnachweis <ref name="…"> mit automatisch erzeugtem, kurzem und eindeutigem Namen (standardmäßig aus).'
+			]
+		},
 		{
 			version: '2.3.2',
 			name: null,
@@ -199,7 +210,9 @@
 		return {
 			germanLang: GM_getValue(CONFIG.storage.optGermanLang, false),  // add sprache=de for German
 			plainWerk:  GM_getValue(CONFIG.storage.optPlainWerk, false),   // remove [[…]] in werk
-			fab:        GM_getValue(CONFIG.storage.optFab, false)          // floating button on every site
+			fab:        GM_getValue(CONFIG.storage.optFab, false),         // floating button on every site
+			noRef:      GM_getValue(CONFIG.storage.optNoRef, false),       // omit <ref></ref> wrapper
+			refName:    GM_getValue(CONFIG.storage.optRefName, false)      // add name="…" to <ref>
 		};
 	}
 
@@ -843,8 +856,48 @@
 				params.push(`|${key}=${value}`);
 			}
 		}
-		
-		return `<ref>{{Internetquelle ${params.join(' ')}}}</ref>`;
+
+		const inner = `{{Internetquelle ${params.join(' ')}}}`;
+
+		// Option: return the bare template without the <ref> wrapper.
+		if (options.noRef) return inner;
+
+		// Option: give the <ref> a fitting, unique, short name.
+		const nameAttr = options.refName
+			? ` name="${buildRefName(values.autor, werk, values.datum, values.url)}"`
+			: '';
+
+		return `<ref${nameAttr}>${inner}</ref>`;
+	}
+
+	/**
+	 * Build a ref name that is fitting (author/work + year), short and unique.
+	 * Readable base = last name of the first author, else the work name, else the
+	 * domain; followed by the publication year and a short deterministic hash of
+	 * the URL so two articles never collide. Example: "Gudenrath2026-1f3a".
+	 */
+	function buildRefName(author, werk, date, url) {
+		let base = '';
+		if (author) {
+			const first = author.split(',')[0].trim();          // first of multiple authors
+			const parts = first.split(/\s+/).filter(Boolean);
+			base = parts.length ? parts[parts.length - 1] : '';  // last name
+		}
+		if (!base && werk) base = stripWikilinks(werk);
+		if (!base && url) base = getDomainFromUrl(url);
+		base = (base || 'ref').replace(/[^A-Za-z0-9]/g, '');     // sanitize for a valid name
+
+		const year = /^(\d{4})/.test(date || '') ? date.slice(0, 4) : '';
+		return `${base}${year}-${shortHash(url || base + year)}`;
+	}
+
+	/** Small deterministic string hash → 4 base-36 chars (for ref-name uniqueness). */
+	function shortHash(str) {
+		let h = 5381;
+		for (let i = 0; i < str.length; i++) {
+			h = ((h * 33) ^ str.charCodeAt(i)) >>> 0;
+		}
+		return h.toString(36).slice(0, 4);
 	}
 
 	// ================================
@@ -1474,6 +1527,16 @@
 						<span class="wcg-toggle-track"></span>
 					</label>
 					<label class="wcg-toggle">
+						<span class="wcg-toggle-text"><code>&lt;ref&gt;</code>-Tags beim Kopieren weglassen</span>
+						<input type="checkbox" id="wcg-opt-noref" ${opts.noRef ? 'checked' : ''}>
+						<span class="wcg-toggle-track"></span>
+					</label>
+					<label class="wcg-toggle">
+						<span class="wcg-toggle-text">Benannter Einzelnachweis <code>&lt;ref name="…"&gt;</code></span>
+						<input type="checkbox" id="wcg-opt-refname" ${opts.refName ? 'checked' : ''}>
+						<span class="wcg-toggle-track"></span>
+					</label>
+					<label class="wcg-toggle">
 						<span class="wcg-toggle-text">Citation-Generator-Modus: schwebender Button auf jeder Seite</span>
 						<input type="checkbox" id="wcg-opt-fab" ${opts.fab ? 'checked' : ''}>
 						<span class="wcg-toggle-track"></span>
@@ -1625,6 +1688,14 @@
 		});
 		modal.querySelector('#wcg-opt-plainwerk').addEventListener('change', (e) => {
 			GM_setValue(CONFIG.storage.optPlainWerk, e.target.checked);
+			modalFunctions.updateCitation();
+		});
+		modal.querySelector('#wcg-opt-noref').addEventListener('change', (e) => {
+			GM_setValue(CONFIG.storage.optNoRef, e.target.checked);
+			modalFunctions.updateCitation();
+		});
+		modal.querySelector('#wcg-opt-refname').addEventListener('change', (e) => {
+			GM_setValue(CONFIG.storage.optRefName, e.target.checked);
 			modalFunctions.updateCitation();
 		});
 		// Floating-button option: persist and show/hide it immediately.
