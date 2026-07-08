@@ -6,6 +6,10 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.13 – 2026-07-08
+- The Independent (`independent.co.uk`): added author extraction from the byline
+  (`address a[href*="/author/"]`); title, work name and date already worked via meta tags.
+
 ## v2.0.12 – 2026-07-07
 - The Canberra Times (`canberratimes.com.au`): added author extraction from the
   ALL-CAPS byline in the article body (requires the script's "uppercase-byline" mode).
