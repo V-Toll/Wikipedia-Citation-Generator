@@ -1,6 +1,6 @@
 {
-  "version": "2.0.14",
-  "lastUpdated": "2026-07-09T00:00:00Z",
+  "version": "2.0.15",
+  "lastUpdated": "2026-07-16T00:00:00Z",
   "description": "Pattern database for the Wikipedia Citation Generator (Userscript)",
   "patterns": {
 	"spiegel.de": {
@@ -360,7 +360,7 @@
 	  "name": "[[Die Zeit]]",
 	  "selectors": {
 		"title": "h1, .zon-teaser-standard__title",
-		"author": ".metadata__source, .byline",
+		"author": ".byline [itemprop=\"name\"], .metadata__source, .byline",
 		"date": "time, .metadata__date"
 	  }
 	},

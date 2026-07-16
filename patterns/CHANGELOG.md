@@ -6,6 +6,9 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.15 – 2026-07-16
+- Die Zeit (`zeit.de`): author is now read from the `itemprop="name"` byline span, so the "Von " prefix no longer appears in the author (e.g. "Sarah Kohler" instead of "Von Sarah Kohler").
+
 ## v2.0.14 – 2026-07-09
 - GameStar (`gamestar.de`): added author selector (`a.author-name`) and set the work
   name to `[[GameStar]]`; title and date already worked via meta tags.
