@@ -1,6 +1,6 @@
 {
-  "version": "2.0.16",
-  "lastUpdated": "2026-07-18T00:00:00Z",
+  "version": "2.0.17",
+  "lastUpdated": "2026-07-19T00:00:00Z",
   "description": "Pattern database for the Wikipedia Citation Generator (Userscript)",
   "patterns": {
 	"spiegel.de": {
@@ -561,6 +561,7 @@
 	"time.com": {
 	  "name": "[[Time]]",
 	  "selectors": {
+		"title": "h1",
 		"author": "a[href^=\"/author/\"]",
 		"date": "time"
 	  }
