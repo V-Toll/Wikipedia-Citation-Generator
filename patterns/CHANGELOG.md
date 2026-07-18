@@ -6,6 +6,9 @@ separate** changelog inside the script (click the version badge in the modal).
 
 Only ever add new entries at the top — never remove old ones.
 
+## v2.0.16 – 2026-07-18
+- TIME (`time.com`): added author (`a[href^="/author/"]`, full name like "Prince Harry, Duke of Sussex") and date (`time`) selectors; the existing `[[Time]]` work name now applies. Title is intentionally left to `og:title` because the page `h1` is a different dek.
+
 ## v2.0.15 – 2026-07-16
 - Die Zeit (`zeit.de`): author is now read from the `itemprop="name"` byline span, so the "Von " prefix no longer appears in the author (e.g. "Sarah Kohler" instead of "Von Sarah Kohler").
 
